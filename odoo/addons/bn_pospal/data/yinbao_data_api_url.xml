@@ -1,0 +1,47 @@
+<odoo>
+        <record id="bn_yinbao_url_1" model="bn.yinbao.url">
+            <field  name="name">交易数据调用地址</field>
+            <field  name="code">queryTicketPages</field>
+            <field  name="bn_yinbao_function_api">https://area7-win.pospal.cn:443/pospal-api2/openapi/v1/ticketOpenApi/queryTicketPages</field>
+            <field  name="bn_yinbao_api_type">bn_api_yinbao_sales_by_product</field>
+            <field  name="state">confirm</field>           
+            
+            
+        </record>
+ 
+        <record id="bn_yinbao_url_2" model="bn.yinbao.url">
+            <field  name="name">付款数据调用地址</field>
+            <field  name="code">queryAllPayMethod</field>
+            <field  name="bn_yinbao_function_api">https://area7-win.pospal.cn:443/pospal-api2/openapi/v1/ticketOpenApi/queryAllPayMethod</field>
+            <field  name="bn_yinbao_api_type">bn_api_yinbao_sales_by_payment</field>
+            <field  name="state">confirm</field> 
+        </record>
+ 
+
+        <record id="bn_yinbao_url_3" model="bn.yinbao.url">
+            <field  name="name">会员调用地址</field>
+            <field  name="code">queryCustomerPages</field>
+            <field  name="bn_yinbao_function_api">https://area7-win.pospal.cn:443/pospal-api2/openapi/v1/customerOpenApi/queryCustomerPages</field>
+            <field  name="bn_yinbao_api_type">bn_api_yinbao_member</field>
+            <field  name="state">confirm</field> 
+        </record>
+
+        <record id="bn_yinbao_url_4" model="bn.yinbao.url">
+            <field  name="name">查询全部商品分类</field>
+            <field  name="code">queryProductCategoryPages</field>
+            <field  name="bn_yinbao_function_api">https://area7-win.pospal.cn:443/pospal-api2/openapi/v1/productOpenApi/queryProductCategoryPages</field>
+            <field  name="bn_yinbao_api_type">bn_api_yinbao_Category</field>
+            <field  name="state">confirm</field> 
+        </record>
+
+        <record id="bn_yinbao_url_5" model="bn.yinbao.url">
+            <field  name="name">查询全部商品</field>
+            <field  name="code">queryProductPages</field>
+            <field  name="bn_yinbao_function_api">https://area7-win.pospal.cn:443/pospal-api2/openapi/v1/productOpenApi/queryProductPages</field>
+            <field  name="bn_yinbao_api_type">bn_api_yinbao_product</field>
+            <field  name="state">confirm</field> 
+        </record>
+
+
+         
+ </odoo>

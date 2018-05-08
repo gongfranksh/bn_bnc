@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sync_jsport_wizard" model="ir.ui.view">
+            <field name="name">同步乐之资料</field>
+            <field name="model">proc.sync.jsport</field>
+            <field name="arch" type="xml">
+                <form string="Scheduler Parameters">
+                    <p>
+                        		乐之资料同步处理.
+                    </p>
+                    <footer>
+                        <button name="sync_product_class" string="大类更新" type="object" class="btn-primary"/>
+                        <button name="sync_product_brand" string="品牌更新" type="object" class="btn-primary"/>
+                        <button name="sync_employee" string="销售人员更新" type="object" class="btn-primary"/>
+                        <button name="sync_supplier" string="供应商更新" type="object" class="btn-primary"/>
+                        <button name="sync_product" string="商品资料更新" type="object" class="btn-primary"/>
+                        <button name="sync_pos_machine" string="POS机资料更新" type="object" class="btn-primary"/>
+                        <button name="proc_check_pos_data_weekly" string="POS交易数据资料同步" type="object" class="btn-primary"/>
+                        <button name="procure_sync_jsport" string="全部同步" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+         <record id="action_proc_sync_jsport" model="ir.actions.act_window">
+            <field name="name">执行处理</field>
+            <field name="res_model">proc.sync.jsport</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+         </record>
+
+    <!-- actions -->
+    <menuitem name=">同步乐之资料" id="bnc_member.sync_jsport_menu" parent="bnc_member.sync_mem_sub_menu"
+              action="action_proc_sync_jsport"/>
+    </data>
+</odoo>

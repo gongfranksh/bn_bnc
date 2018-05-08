@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sync_eservices_wizard" model="ir.ui.view">
+            <field name="name">同步电脑医院资料</field>
+            <field name="model">proc.sync.eservices</field>
+            <field name="arch" type="xml">
+                <form string="Scheduler Parameters">
+                    <p>
+                        		电脑医院资料同步处理.
+                    </p>
+                    <footer>
+                        <button name="sync_eservices_sales" string="销售更新" type="object" class="btn-primary"/>  
+                        <button name="sync_eservices_branch" string="门店公司更新" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+         <record id="action_proc_sync_eservices" model="ir.actions.act_window">
+            <field name="name">执行处理</field>
+            <field name="res_model">proc.sync.eservices</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+         </record>
+
+    <!-- actions -->
+    <menuitem name=">同步电脑医院资料" id="bnc_member.sync_eservices_menu" parent="bnc_member.sync_mem_sub_menu"
+              action="action_proc_sync_eservices"/>
+    </data>
+</odoo>

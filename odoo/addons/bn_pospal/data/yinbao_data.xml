@@ -1,0 +1,67 @@
+<odoo>
+        <record id="bn_yinbao_1" model="bn.yinbao.appid">
+            <field  name="name">上海翼世纪电竞馆</field>
+            <field  name="code">shysj1</field>
+            <field  name="bn_yinbao_appid">2347DF469FBDF69749BED69E57E28690</field>
+            <field  name="bn_yinbao_appkey">180751913166435335</field>
+            <field  name="state">confirm</field>
+            
+        </record>
+ 
+         <record id="bn_yinbao_2" model="bn.yinbao.appid">
+            <field  name="name">沈阳翼世纪电竞馆</field>
+            <field  name="code">syysjdjg</field>
+            <field  name="bn_yinbao_appid">F87855C67F10712F9F7147BFB18B8D99</field>
+            <field  name="bn_yinbao_appkey">845915993921463775</field>
+                        <field  name="state">confirm</field>
+                    </record>
+ 
+          <record id="bn_yinbao_3" model="bn.yinbao.appid">
+            <field  name="name">成都翼世纪电竞馆</field>
+            <field  name="code">cdysjdjg</field>
+            <field  name="bn_yinbao_appid">109B1899925CA52FDA2225FD1C5D573C</field>
+            <field  name="bn_yinbao_appkey">402555293771297813</field>
+                     <field  name="state">confirm</field>
+         </record>
+                    
+          <record id="bn_yinbao_4" model="bn.yinbao.appid">
+            <field  name="name">翼世纪电竞馆郑州店</field>
+            <field  name="code">zzysjdjg</field>
+            <field  name="bn_yinbao_appid">D8ED3022DDD65D017B31468EB6211A65</field>
+            <field  name="bn_yinbao_appkey">50013882149279409</field>
+                        <field  name="state">confirm</field>
+        </record>
+        
+          <record id="bn_yinbao_5" model="bn.yinbao.appid">
+            <field  name="name">厦门翼世纪电竞馆</field>
+            <field  name="code">xmysjdjg</field>
+            <field  name="bn_yinbao_appid">8D23C0B78C095499C9F3FF43D49E7708</field>
+            <field  name="bn_yinbao_appkey">765238334881423425</field>
+                       <field  name="state">confirm</field>
+        </record>
+        
+          <record id="bn_yinbao_6" model="bn.yinbao.appid">
+            <field  name="name">广州翼世纪电竞馆</field>
+            <field  name="code">gzysjdjg</field>
+            <field  name="bn_yinbao_appid">8B140D6D810AD38718258CA396916FF1</field>
+            <field  name="bn_yinbao_appkey">468921445419009361</field>
+                       <field  name="state">confirm</field>
+        </record>
+        <record id="bn_yinbao_7" model="bn.yinbao.appid">
+            <field  name="name">合肥翼世纪电竞馆</field>
+            <field  name="code">hfysjdjg</field>
+            <field  name="bn_yinbao_appid">6EFD8479510C2075A11D099C5768E0EE</field>
+            <field  name="bn_yinbao_appkey">1024580870074588186</field>
+                       <field  name="state">confirm</field>
+        </record>
+        
+        <record id="bn_yinbao_8" model="bn.yinbao.appid">
+            <field  name="name">天津翼世纪电竞馆</field>
+            <field  name="code">tjysjdjg</field>
+            <field  name="bn_yinbao_appid">B45589658408374CCD8404F6FE85C182</field>
+            <field  name="bn_yinbao_appkey">811771780425750621</field>
+                       <field  name="state">confirm</field>
+        </record>
+        
+
+ </odoo>

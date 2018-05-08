@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sync_2dfire_wizard" model="ir.ui.view">
+            <field name="name">同步乐之咖啡资料</field>
+            <field name="model">proc.sync.2dfire</field>
+            <field name="arch" type="xml">
+                <form string="Scheduler Parameters">
+                    <p>
+                        		乐之咖啡资料同步处理.
+                    </p>
+                    <footer>
+                        <button name="sync_2dfire_sales" string="销售更新" type="object" class="btn-primary"/>  
+                        <button name="sync_2dfire_product" string="产品更新" type="object" class="btn-primary"/>
+                        <button name="interface_2dfire_to_bnc_category" string="类别跟新" type="object" class="btn-primary"/>
+                        <button name="interface_2dfire_to_bnc_product" string="产品更新BNC" type="object" class="btn-primary"/>     
+                        <button name="interface_2dfire_to_bnc_sales" string="销售更新BNC" type="object" class="btn-primary"/>                          
+                        
+                        interface_2dfire_to_bnc_sales                 
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+         <record id="action_proc_sync_2dfire" model="ir.actions.act_window">
+            <field name="name">执行处理</field>
+            <field name="res_model">proc.sync.2dfire</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+         </record>
+
+    <!-- actions -->
+    <menuitem name=">同步乐之咖啡资料" id="bnc_member.sync_2dfire_menu" parent="bnc_member.sync_mem_sub_menu"
+              action="action_proc_sync_2dfire"/>
+    </data>
+</odoo>

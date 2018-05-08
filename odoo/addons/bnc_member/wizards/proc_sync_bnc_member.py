@@ -1,0 +1,173 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# Author: weiliang
+# Date :2018-02-14
+
+import logging
+import threading
+
+from odoo import api, models, tools, registry
+from BNmssql import Bnc_read_SQLCa
+from BNmysql import Bnc_Mysql_SQLCa
+
+# from idlelib.SearchEngine import get
+
+_logger = logging.getLogger(__name__)
+
+
+class proc_sync_bnc_member(models.TransientModel):
+    _name = 'proc.sync.bnc.member'
+    _description = 'sync.bnc.member'
+
+    def query_period(self):
+        start_stamp = 0
+        end_stamp = 0
+        query_local = " select max(timestamp) as maxnum from bnc_member"
+        query_remote = "SELECT CONVERT(INT,max(timestamp)) AS timestamp FROM bnc_member"
+        # 取得本库最新的时间戳
+        #        cr=registry(self._cr.dbname).cursor()
+        cr = self._cr
+        cr.execute(query_local)
+        for local_max_num in cr.fetchall():
+            start_stamp = local_max_num[0]
+            if local_max_num[0] is None:
+                start_stamp = 0
+        #        cr.close()
+
+        return_start = start_stamp
+
+        # 取得会员主库会员资料最大的时间戳
+        ms = Bnc_read_SQLCa(self)
+        remote_stamp = ms.ExecQuery(query_remote.encode('utf-8'))
+        for end_stamp in remote_stamp:
+            if remote_stamp[0] is None:
+                end_stamp = 0
+        return_end = end_stamp[0]
+
+        res = {
+            'start_stamp': return_start,
+            'end_stamp': return_end,
+        }
+        return res
+
+    def _sync_bnc_member(self):
+        # 取得更新数据范围
+        btw = self.query_period()
+        ms = Bnc_read_SQLCa(self)
+        # 待导入会员卡-本地时间戳和主服务器时间戳之间的记录导入，主服务器记录有更新时间戳就会变化
+        sql = """ 
+               SELECT   lngbncid,lngbusid,strphone,strBncCode,
+               DATEADD(hour,-8,opendate) as opendate, 
+               DATEADD(hour,-8,regdate) as  regdate,
+               DATEADD(hour,-8,updatedate) as  updatedate,
+              lngvipgrade,dvipdate,CONVERT(INT,timestamp) AS timestamp,strsex,ishandset
+               FROM bnc_member  
+               where  CONVERT(INT,timestamp) between {0} and {1}
+                  """
+        sql = sql.format(btw['start_stamp'], btw['end_stamp'])
+        #        sql = sql.format(0,58597)
+
+        bnc_memeber_list = ms.ExecQuery(sql.encode('utf-8'))
+        for (lngbncid, lngbusid, strphone, strbncardid, opendate, regdate, UpdateDate, lngvipgrade, dvipdate, timestamp,
+             strsex, ishandset) in bnc_memeber_list:
+            # 封装bnc_member记录
+            # 封装 res_partner记录
+            print strbncardid
+            vals = {
+                'strbncardid': strbncardid,
+                'name': strbncardid,
+                #                'phone': strphone,
+                #                'mobile': strphone,
+                'strbnctype': 'member',
+                'is_company': False,
+                'supplier': False,
+                'customer': True,
+                'company_id': False,
+            }
+            # 检查是插入还是更新
+            #            r01=self.env['bnc.member'].search([('strBncCardid', '=',strbncardid)])
+            print vals
+            r01 = self.env['bnc.member'].get_mem_by_cardno(strbncardid)
+
+            res = {
+                'lngBncId': lngbncid,
+                'lngBusId': lngbusid,
+                'strPhone': strphone,
+                'strBncCardid': strbncardid,
+                'OpenDate': opendate,
+                'RegDate': regdate,
+                'lngvipgrade': lngvipgrade,
+                'dvipDate': dvipdate,
+                'timestamp': timestamp,
+                'strSex': strsex,
+                'ishandset': ishandset,
+                #                        'resid':self.env['res.partner'].write(vals),
+            }
+            if r01:
+                res['resid'] = self.env['res.partner'].write(vals)
+                self.env['bnc.member'].write(res)
+
+            else:
+                res['resid'] = self.env['res.partner'].create(vals).id,
+                print res
+                self.env['bnc.member'].create(res)
+        return True
+
+    def sync_member_personal_information(self):
+        print 'sync_member_personal_information'
+        db=self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
+        print db['db_ip']
+        print db['db_name']
+
+        mem_list=self.get_personal_recordset(Bnc_Mysql_SQLCa(db[0]))
+        for (mobile,bu_name, wxid, unionid, openid, nickname, sex,
+                birthday, email, province, city, address,
+                vip_level_name, agent)  in mem_list:
+
+            #print mobile
+            member = self.env['bnc.member'].search([('strPhone', '=',mobile)])
+
+            if member:
+                val={
+                  'wxid':wxid,
+                  'unionid':unionid,
+                  'openid':openid,
+                  'nickname':nickname,
+                  'agent':agent,
+                  'bu_name':bu_name,
+                  'province':province,
+                  'city':city,
+                  'address':address,
+                  'vip_level_name':vip_level_name,
+                 'strSex': sex,
+                 'Birthday': birthday,
+                }
+                member.write(val)
+
+
+
+        return True
+
+    def get_personal_recordset(self, ms):
+        # 获取更新记录范围，本地库的时间戳和服务端时间戳
+        sql = """
+                select
+                mobile,bu_name, wxid, unionid, openid, nickname, sex, 
+                birthday, email, province, city, address, 
+                vip_level_name, agent
+                from v_user order
+                by update_time desc
+                  """
+#        sql = sql.format(btw['start_stamp'], btw['end_stamp'])
+        res = ms.ExecQuery(sql.encode('utf-8'))
+        return res
+
+    @api.multi
+    def procure_sync_bnc(self):
+
+        #       bnc_member = self.env['bnc.member']
+        #       bnc_member.sync_bnc_member
+        #        threaded_calculation = threading.Thread(target=self.sync_bnc_member, args=())
+        #        threaded_calculation.start()
+        self._sync_bnc_member()
+        return {'type': 'ir.actions.act_window_close'}

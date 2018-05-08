@@ -1,0 +1,22 @@
+<odoo>
+ <data>
+    <record model="ir.ui.view" id="bnc_member.gammemlist">
+      <field name="name">game member list</field>
+      <field name="model">gam.mem.card</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="strPhone"/>
+        </tree>
+      </field>
+    </record>
+<record model="ir.actions.act_window" id="bnc_member.gammemlist_action_window">
+      <field name="name">game member list</field>
+      <field name="res_model">gam.mem.card</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<menuitem name="电竞会员卡" id="bnc_member.bu_mem_cof_menu" parent="bnc_member.bu_mem_sub_menu"
+              action="bnc_member.gammemlist_action_window"/>   
+              
+</data>
+</odoo>

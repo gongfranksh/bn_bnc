@@ -1,0 +1,26 @@
+
+<odoo>
+ <data>
+    <record model="ir.ui.view" id="bnc_member.btwmenlist">
+      <field name="name">btweens member list</field>
+      <field name="model">btw.mem.card</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="strPhone"/>
+        </tree>
+      </field>
+    </record>
+<record model="ir.actions.act_window" id="bnc_member.btwmemlist_action_window">
+      <field name="name">Buynow bn mem</field>
+      <field name="res_model">btw.mem.card</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<menuitem name="btw会员卡" id="bnc_member.bu_mem_btw_menu" parent="bnc_member.bu_mem_sub_menu"
+              action="bnc_member.btwmemlist_action_window"/>         
+
+
+
+
+ </data>
+</odoo>

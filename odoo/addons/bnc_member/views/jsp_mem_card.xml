@@ -1,0 +1,24 @@
+<odoo>
+ <data>
+    <record model="ir.ui.view" id="bnc_member.jsportlist">
+      <field name="name">jsport memeber list</field>
+      <field name="model">jsp.mem.car</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="strPhone"/>
+          <field name="strCardType"/>
+          <field name="strJspCardId"/>
+          <field name="strMembid"/>          
+        </tree>
+      </field>
+    </record>
+<record model="ir.actions.act_window" id="bnc_member.jsportlist_action_window">
+      <field name="name">Jsport memeber  window</field>
+      <field name="res_model">jsp.mem.car</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="乐之会员卡" id="bnc_member.bu_mem_jsp_menu" parent="bnc_member.bu_mem_sub_menu"
+              action="bnc_member.jsportlist_action_window"/>        
+ </data>
+</odoo>

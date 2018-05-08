@@ -1,0 +1,26 @@
+<odoo>
+        <record id="bn_2dfire_branch1" model="bn.2dfire.branchs">
+            <field  name="name">乐之咖啡</field>
+            <field  name="code">131360</field>
+            <field  name="appids">1</field>
+            <field  name="state">confirm</field>
+        </record>
+         <record id="bn_2dfire_branch2" model="bn.2dfire.branchs">
+            <field  name="name">茶依漾</field>
+            <field  name="code">131362</field>
+            <field  name="appids">1</field>
+            <field  name="state">confirm</field>
+        </record>
+         <record id="bn_2dfire_branch3" model="bn.2dfire.branchs">
+            <field  name="name">比吞斯</field>
+            <field  name="code">131363</field>
+            <field  name="appids">1</field>
+            <field  name="state">confirm</field>
+        </record>
+          <record id="bn_2dfire_branch4" model="bn.2dfire.branchs">
+            <field  name="name">乐之咖啡天津店(门店)</field>
+            <field  name="code">00241638</field>
+            <field  name="appids">2</field>
+            <field  name="state">confirm</field>
+        </record> 
+  </odoo>

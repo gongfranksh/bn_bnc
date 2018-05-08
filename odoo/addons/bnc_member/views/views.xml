@@ -1,0 +1,17 @@
+
+<odoo>
+
+<data>
+    <!-- Top menu item -->
+    <menuitem name="百乐卡" id="bnc_member.menu_root"/>
+
+    <!-- menu categories -->
+    <menuitem name="主卡会员资料" id="bnc_member.bnc_mem_sub_menu" parent="bnc_member.menu_root"/>
+    <menuitem name="数据同步维护" id="bnc_member.sync_mem_sub_menu" parent="bnc_member.menu_root"/>
+    <menuitem name="标签维护" id="bnc_member.bnc_tags_sub_menu" parent="bnc_member.menu_root"/>
+    <menuitem name="活动维护" id="bnc_member.bnc_lead_sub_menu" parent="bnc_member.menu_root"/>
+    <menuitem name="数据挖掘分析" id="bnc_member.bnc_mining_sub_menu" parent="bnc_member.menu_root"/>
+    <menuitem id="bnc_member.bnc_report_sub_menu" name="分析及报表" parent="bnc_member.menu_root" sequence="99" />  
+
+  </data>
+</odoo>

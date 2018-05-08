@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sync_buynow_wizard" model="ir.ui.view">
+            <field name="name">同步统收资料</field>
+            <field name="model">proc.sync.buynow</field>
+            <field name="arch" type="xml">
+                <form string="Scheduler Parameters">
+                    <p>
+                        		统收资料同步处理.
+                    </p>
+                    <footer>
+                        <button name="sync_product_class_all_branch" string="类别更新" type="object" class="btn-primary"/>
+                        <button name="sync_product_brand_all_branch" string="品牌更新" type="object" class="btn-primary"/>
+                        <button name="sync_supplier_all_branch" string="供应商更新" type="object" class="btn-primary"/>
+                        <button name="sync_product_all_branch" string="商品更新" type="object" class="btn-primary"/>
+                        <button name="sync_pos_data_all_branch" string="POS交易更新" type="object" class="btn-primary"/>     
+                        <button name="proc_sync_buynow_all" string="全部更新" type="object" class="btn-primary"/>                                                          
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+         <record id="action_proc_sync_buynow" model="ir.actions.act_window">
+            <field name="name">执行处理</field>
+            <field name="res_model">proc.sync.buynow</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+         </record>
+
+    <!-- actions -->
+    <menuitem name=">同步统收资料" id="bnc_member.sync_buynow_menu" parent="bnc_member.sync_mem_sub_menu"
+              action="action_proc_sync_buynow"/>
+    </data>
+</odoo>

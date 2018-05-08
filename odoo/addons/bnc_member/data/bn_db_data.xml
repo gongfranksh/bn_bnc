@@ -1,0 +1,37 @@
+<odoo>
+        <record id="bn_db_connect_1" model="bn.db.connect">
+            <field  name="db_ip">d1-hq.buynow.com.cn</field>
+            <field  name="db_name">hypermarket02001</field>
+            <field  name="db_user">hm02001</field>
+            <field  name="db_password">buynowsy2016</field>
+            <field  name="bu_code">bn</field>            
+            <field  name="store_code">02001</field>
+        </record>
+        <record id="bn_db_connect_2" model="bn.db.connect">
+            <field  name="db_ip">d1-hq.buynow.com.cn</field>
+            <field  name="db_name">hypermarket02002</field>
+            <field  name="db_user">hm02002</field>
+            <field  name="db_password">buynowsy2016</field>
+            <field  name="bu_code">bn</field>            
+            <field  name="store_code">02002</field>
+        </record>
+
+        <record id="bn_db_connect_20" model="bn.db.connect">
+            <field  name="db_ip">d1-hq.buynow.com.cn</field>
+            <field  name="db_name">humanresource</field>
+            <field  name="db_user">smartq</field>
+            <field  name="db_password">b'X$?@VtxC</field>
+            <field  name="bu_code">hr</field>            
+            <field  name="store_code">hrsys</field>
+        </record>
+
+        <record id="bn_db_connect_30" model="bn.db.connect">
+            <field  name="db_ip">192.168.79.99</field>
+            <field  name="db_name">bncard</field>
+            <field  name="db_user">bncard_r</field>
+            <field  name="db_password">buynow123..</field>
+            <field  name="bu_code">mysql</field>
+            <field  name="store_code">bncard</field>
+        </record>
+
+</odoo>

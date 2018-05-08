@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--  Run Schedulers -->
+
+        <record id="view_sync_bnc_member_wizard" model="ir.ui.view">
+            <field name="name">同步百乐卡</field>
+            <field name="model">proc.sync.bnc.member</field>
+            <field name="arch" type="xml">
+                <form string="Scheduler Parameters">
+                    <p>
+                        		百脑汇会员卡资料同步处理.
+                    </p>
+                    <footer>
+                        <button name="procure_sync_bnc" string="执行处理" type="object" class="btn-primary"/>
+                        <button name="sync_member_personal_information" string="跟新个人资料" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="取消 Cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+         <record id="action_proc_sync_bnc_members" model="ir.actions.act_window">
+            <field name="name">执行处理</field>
+            <field name="res_model">proc.sync.bnc.member</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+         </record>
+
+    <!-- actions -->
+    <menuitem name="同步会员资料" id="bnc_member.sync_bnc_mem_menu" parent="bnc_member.sync_mem_sub_menu"
+              action="action_proc_sync_bnc_members"/>
+         
+
+    </data>
+</odoo>

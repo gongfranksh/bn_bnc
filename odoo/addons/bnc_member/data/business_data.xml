@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record id="busid_id_1" model="bnc.business">
+            <field  name="strBuscode">jsp</field>
+            <field  name="strBusName">乐之事业部</field>
+        </record>
+
+        <record id="busid_id_2" model="bnc.business">
+            <field  name="strBuscode">bn</field>
+            <field  name="strBusName">百脑汇统一收银</field>
+        </record>
+        <record id="busid_id_3" model="bnc.business">
+            <field  name="strBuscode">cof</field>
+            <field  name="strBusName">乐之咖啡</field>
+        </record>
+        <record id="busid_id_4" model="bnc.business">
+            <field  name="strBuscode">gam</field>
+            <field  name="strBusName">电竞翼世纪</field>
+        </record>
+        <record id="busid_id_5" model="bnc.business">
+            <field  name="strBuscode">hos</field>
+            <field  name="strBusName">电脑医院</field>
+        </record>
+        <record id="busid_id_6" model="bnc.business">
+            <field  name="strBuscode">btw</field>
+            <field  name="strBusName">Betweens西餐厅</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,84 @@
+
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="bnc_member.view_bnc_lead_tree">
+      <field name="name">活动记录</field>
+      <field name="model">bnc.lead</field>
+      <field name="arch" type="xml">
+        <tree>
+		          <field name="code" />
+		          <field name="name"/>
+		          <field name="buid"/>
+		          <field name="start"/>
+		          <field name="end"/>
+		          <field name="state"/>		          
+		          
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="bnc_member.view_bnc_lead_form">
+      <field name="name">活动记录</field>
+      <field name="model">bnc.lead</field>
+      <field name="arch" type="xml">
+        <form>
+                            <header>
+                    </header>
+                    <sheet>
+                    <group col="4">
+		          <field name="code" />
+		          <field name="name"/>
+		          <field name="buid"/>
+		          <field name="state"/>			          
+		          <field name="start"/>
+		          <field name="end"/>
+	          
+		                              
+		          </group>
+                    <group col="2">
+、		          <field name="crmleadid">
+					<tree>
+					<field name="name"/>
+					<field name="partner_id"/>
+					<field name="type"/>
+					<field name="date_closed"/>					
+					</tree>
+
+
+						</field>
+
+		          <field name="memo"/>		          
+		          </group>
+
+		</sheet>
+		          
+        </form>
+      </field>
+    </record>
+
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="bnc_member.action_bnc_lead">
+      <field name="name">活动记录</field>
+      <field name="res_model">bnc.lead</field>
+      <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+
+
+    <!-- actions -->
+    <menuitem name="活动记录" id="bnc_member.bnc_lead_menu" parent="bnc_member.bnc_lead_sub_menu"
+              action="bnc_member.action_bnc_lead"/>
+
+
+
+<!-- 
+    <menuitem name="Server to list" id="bnc_tags.bu_mem_menu" parent="bnc_tags.bu_mem_sub_menu"
+              action="bnc_tags.action_server"/>
+ -->
+
+  </data>
+</odoo>

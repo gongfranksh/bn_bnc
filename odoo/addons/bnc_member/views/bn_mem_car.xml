@@ -1,0 +1,25 @@
+<odoo>
+ <data>
+ 
+    <record model="ir.ui.view" id="bnc_member.bnmenlist">
+      <field name="name">buynow pos member list</field>
+      <field name="model">bn.mem.car</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="strPhone" password="True"/>
+          <field name="strBnCardId"/>
+        </tree>
+      </field>
+    </record>
+ 
+<record model="ir.actions.act_window" id="bnc_member.bnmemlist_action_window">
+      <field name="name">Buynow bn mem</field>
+      <field name="res_model">bn.mem.car</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<menuitem name="统收会员卡" id="bnc_member.bu_mem_bn_menu" parent="bnc_member.bu_mem_sub_menu"
+              action="bnc_member.bnmemlist_action_window"/>        
+
+ </data>
+</odoo>

@@ -1,0 +1,17 @@
+<odoo>
+        <record id="bn_2dfire_1" model="bn.2dfire.appid">
+            <field  name="name">上海店二维火</field>
+            <field  name="code">shanghai</field>
+            <field  name="bn_2dfire_app_secret">0154e40499c46f29a058fb3c3976f8b3</field>
+            <field  name="bn_2dfire_app_key">9b24bfb7d238ca1de5650f754e3f84de</field>
+            <field  name="state">confirm</field>
+        </record>
+         <record id="bn_2dfire_2" model="bn.2dfire.appid">
+            <field  name="name">总部统一接口</field>
+            <field  name="code">hq-it</field>
+            <field  name="bn_2dfire_app_secret">03a8a076bd211a0483ece5f9225eaa24</field>
+            <field  name="bn_2dfire_app_key">3e44c5c95fb18346c4a059b4cef82d50</field>
+            <field  name="state">confirm</field>
+        </record>
+ 
+ </odoo>

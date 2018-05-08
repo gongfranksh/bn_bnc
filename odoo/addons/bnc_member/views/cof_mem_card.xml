@@ -1,0 +1,22 @@
+<odoo>
+ <data>
+    <record model="ir.ui.view" id="bnc_member.cofmenlist">
+      <field name="name">cof member list</field>
+      <field name="model">cof.mem.card</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="strPhone"/>
+        </tree>
+      </field>
+    </record>
+<record model="ir.actions.act_window" id="bnc_member.cofmemlist_action_window">
+      <field name="name">Buynow cof mem</field>
+      <field name="res_model">cof.mem.card</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<menuitem name="乐之咖啡会员卡" id="bnc_member.bu_mem_cof_menu" parent="bnc_member.bu_mem_sub_menu"
+              action="bnc_member.cofmemlist_action_window"/>   
+              
+</data>
+</odoo>

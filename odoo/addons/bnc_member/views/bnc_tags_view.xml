@@ -1,0 +1,69 @@
+
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="bnc_member.view_bnc_tags_tree">
+      <field name="name">用户标签</field>
+      <field name="model">bnc.tags</field>
+      <field name="arch" type="xml">
+        <tree>
+		          <field name="code" />
+		          <field name="name"/>
+		          <field name="isActive"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="bnc_member.view_bnc_tags_form">
+      <field name="name">用户标签</field>
+      <field name="model">bnc.tags</field>
+      <field name="arch" type="xml">
+        <form>
+                            <header>
+                    </header>
+                    <sheet>
+                    <group col="4">
+        		  <field name="code" />
+		          <field name="name"/>
+		          <field name="activeDate"/>
+		          <field name="internal_method"/>
+		          </group>		          
+                   <group col="4">		          	
+		          <field name="isRunScript"/>
+		          <field name="isActive"/>
+		          </group>
+		          
+		          <group col="2">
+		          <field name="rundate" />
+		          <field name="run_sql"/>
+		          <field name="run_method"/>
+		          <field name="memo"/>
+		          </group>
+		</sheet>
+		          
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="bnc_member.action_bnc_tags">
+      <field name="name">用户标签</field>
+      <field name="res_model">bnc.tags</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+    <!-- actions -->
+    <menuitem name=">用户标签维护" id="bnc_member.bnc_tags_menu" parent="bnc_member.bnc_tags_sub_menu"
+              action="bnc_member.action_bnc_tags"/>
+
+<!-- 
+    <menuitem name="Server to list" id="bnc_tags.bu_mem_menu" parent="bnc_tags.bu_mem_sub_menu"
+              action="bnc_tags.action_server"/>
+ -->
+
+  </data>
+</odoo>

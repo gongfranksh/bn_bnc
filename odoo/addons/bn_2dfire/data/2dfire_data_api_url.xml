@@ -1,0 +1,31 @@
+<odoo>
+        <record id="bn_2dfire_url_1" model="bn.2dfire.url">
+            <field  name="name">查询店铺订单列表</field>
+            <field  name="code">orderlist</field>
+            <field  name="bn_2dfire_function_api">http://open.2dfire.com/router</field>
+            <field  name="bn_2dfire_function_method">dfire.shop.order.list</field>
+            <field  name="bn_2dfire_api_type">bn_api_2dfire_order</field>
+            <field  name="state">confirm</field>           
+        </record>
+ 
+        <record id="bn_2dfire_url_2" model="bn.2dfire.url">
+            <field  name="name">查询店铺订单详情列表</field>
+            <field  name="code">orderdetail</field>
+            <field  name="bn_2dfire_function_api">http://open.2dfire.com/router</field>
+            <field  name="bn_2dfire_function_method">dfire.shop.order.instance.list</field>
+            <field  name="bn_2dfire_api_type">bn_api_2dfire_order_instance_list</field>
+            <field  name="state">confirm</field>           
+        </record>
+  
+        <record id="bn_2dfire_url_3" model="bn.2dfire.url">
+            <field  name="name">查询商铺所有的菜品信息</field>
+            <field  name="code">menuquery</field>
+            <field  name="bn_2dfire_function_api">http://open.2dfire.com/router</field>
+            <field  name="bn_2dfire_function_method">dfire.total.menu.query</field>
+            <field  name="bn_2dfire_api_type">bn_api_2dfire_menu_query</field>
+            <field  name="state">confirm</field>           
+        </record>
+  
+  
+  
+ </odoo>

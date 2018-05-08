@@ -1,0 +1,42 @@
+
+<odoo>
+    <data>
+        <record id="view_bnc_lead_process" model="ir.ui.view">
+            <field name="name">活动产生处理</field>
+            <field name="model">proc.bnc.lead</field>
+            <field name="arch" type="xml">
+                <form string="Scheduler Parameters">
+                    <p>
+                        		活动产生处理.
+                    </p>
+                    <footer>
+                        <button name="create_lead" string="产生活动" type="object" class="btn-primary"/>  
+                        <button name="create_lead_buynow" string="产生活动6000以上" type="object" class="btn-primary"/>  
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="bnc_member.action_bnc_lead_process">
+      <field name="name">活动产生处理</field>
+      <field name="res_model">proc.bnc.lead</field>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
+    </record>
+
+
+
+    <!-- actions -->
+    <menuitem name="活动产生处理" id="bnc_member.bnc_lead_process_menu" parent="bnc_member.bnc_lead_sub_menu"
+              action="bnc_member.action_bnc_lead_process"/>
+
+<!-- 
+    <menuitem name="Server to list" id="bnc_tags.bu_mem_menu" parent="bnc_tags.bu_mem_sub_menu"
+              action="bnc_tags.action_server"/>
+ -->
+
+  </data>
+</odoo>

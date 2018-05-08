@@ -1,0 +1,35 @@
+<odoo>
+        <record id="userid_100" model="res.users">
+            <field  name="name">乐之</field>
+            <field  name="login">jspot-users</field>
+            <field  name="active">True</field>
+        </record>
+
+        <record id="userid_200" model="res.users">
+            <field  name="name">百脑汇统收</field>
+            <field  name="login">buynow-users</field>
+            <field  name="active">True</field>
+        </record>
+        <record id="userid_300" model="res.users">
+            <field  name="name">电竞</field>
+            <field  name="login">game-users</field>
+            <field  name="active">True</field>
+        </record>
+        <record id="userid_400" model="res.users">
+            <field  name="name">乐之咖啡</field>
+            <field  name="login">caf-users</field>
+            <field  name="active">True</field>
+        </record>
+        <record id="userid_500" model="res.users">
+            <field  name="name">电脑医院</field>
+            <field  name="login">hos-users</field>
+            <field  name="active">True</field>
+        </record>
+
+        <record id="userid_600" model="res.users">
+            <field  name="name">btws</field>
+            <field  name="login">btws-users</field>
+            <field  name="active">True</field>
+        </record>
+
+</odoo>

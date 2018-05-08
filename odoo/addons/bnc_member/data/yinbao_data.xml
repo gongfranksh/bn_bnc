@@ -1,0 +1,8 @@
+<odoo>
+        <record id="bn_yinbao_1" model="bn.yinbao.appid">
+            <field  name="name">上海翼世纪电竞馆</field>
+            <field  name="code">shysj1</field>
+            <field  name="bn_yinbao_appid">2347DF469FBDF69749BED69E57E28690</field>
+            <field  name="bn_yinbao_appkey">180751913166435335</field>
+        </record>
+ </odoo>
