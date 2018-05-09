@@ -142,8 +142,7 @@ class bnc_mining_kmeans(models.Model):
                 IrAttachment.create(vals)
             except Exception:
                 continue
-                # break
-                # raise
+
         return True
 
 
