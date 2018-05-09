@@ -6,3 +6,4 @@ from . import wizards
 from . import tagprocess
 from . import lead
 from . import mining
+from . import office
