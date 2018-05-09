@@ -5,10 +5,11 @@
 
 import logging
 import threading
-
+import re
 from odoo import api, models, tools, registry
 from BNmssql import Bnc_read_SQLCa
 from BNmysql import Bnc_Mysql_SQLCa
+
 
 # from idlelib.SearchEngine import get
 
@@ -33,7 +34,6 @@ class proc_sync_bnc_member(models.TransientModel):
             if local_max_num[0] is None:
                 start_stamp = 0
         #        cr.close()
-
         return_start = start_stamp
 
         # 取得会员主库会员资料最大的时间戳
@@ -122,11 +122,10 @@ class proc_sync_bnc_member(models.TransientModel):
         mem_list=self.get_personal_recordset(Bnc_Mysql_SQLCa(db[0]))
         for (mobile,bu_name, wxid, unionid, openid, nickname, sex,
                 birthday, email, province, city, address,
-                vip_level_name, agent)  in mem_list:
+                vip_level_name, agent,stamp)  in mem_list:
 
             #print mobile
             member = self.env['bnc.member'].search([('strPhone', '=',mobile)])
-
             if member:
                 val={
                   'wxid':wxid,
@@ -135,32 +134,75 @@ class proc_sync_bnc_member(models.TransientModel):
                   'nickname':nickname,
                   'agent':agent,
                   'bu_name':bu_name,
+                  'strEMail': email,
                   'province':province,
                   'city':city,
                   'address':address,
                   'vip_level_name':vip_level_name,
                  'strSex': sex,
                  'Birthday': birthday,
+                 'mysqlstamp': stamp,
                 }
                 member.write(val)
-
-
-
         return True
 
     def get_personal_recordset(self, ms):
         # 获取更新记录范围，本地库的时间戳和服务端时间戳
+        query_local = " select max(mysqlstamp) as maxnum from bnc_member"
+        cr = self._cr
+        cr.execute(query_local)
+        for local_max_num in cr.fetchall():
+            start_stamp = local_max_num[0]
+            if local_max_num[0] is None:
+                start_stamp = 0
         sql = """
                 select
                 mobile,bu_name, wxid, unionid, openid, nickname, sex, 
                 birthday, email, province, city, address, 
-                vip_level_name, agent
-                from v_user order
-                by update_time desc
+                vip_level_name, agent,unix_timestamp(update_time)
+                from v_user 
+                where unix_timestamp(update_time)>{0}
+                order by update_time desc
                   """
-#        sql = sql.format(btw['start_stamp'], btw['end_stamp'])
+        sql=sql.format(start_stamp)
         res = ms.ExecQuery(sql.encode('utf-8'))
         return res
+
+    def identify_personal(self):
+        recordset=self.env['bnc.member'].search([('phone_status','!=','True')])
+        for rec in recordset :
+            if rec['agent']:
+               info=rec['agent']
+            else:
+               info=''
+
+            result=self.re_phone(info)
+            if len(result)<>0 :
+                if len(result)==2:
+                    val={
+                        'phone_1':result[0],
+                        'phone_2':result[1],
+                        'phone_status':True
+                    }
+                if len(result) == 4:
+                    val = {
+                        'phone_1': result[0],
+                        'phone_2': result[1],
+                        'phone_3': result[2],
+                        'phone_4': result[3],
+                        'phone_status': True
+                    }
+                rec.write(val)
+
+        return True
+
+    def re_phone(self,agent):
+        if len(agent) <> 0 :
+            res = re.findall(r'[^()]+', agent)
+            phone = re.split(r';', res[1])
+        else:
+            phone ={}
+        return phone
 
     @api.multi
     def procure_sync_bnc(self):

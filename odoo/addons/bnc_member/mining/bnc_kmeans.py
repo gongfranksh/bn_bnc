@@ -120,26 +120,30 @@ class bnc_mining_kmeans(models.Model):
             if os.path.exists(file_path):
                 os.remove(file_path)
                 
-                
-            self.density_plot_draw(data).savefig(file_path)
-#            if os.access(filename, os.R_OK):
-            with open(file_path, 'rb') as fp:
-                     data = fp.read().encode('base64')
-                     
-            print sys.path[0]
-            IrAttachment = self.env['ir.attachment']  
-            vals= dict(
-                        name=filename,
-                        datas_fname=filename,
-#                        url=url_path,
-                        res_model='bnc.mining.kmeans',
-                        res_name=filename,
-                        res_id=self.id,
-                        type='binary',
-                        datas=data,
-                )          
-            
-            IrAttachment.create(vals)
+            try:
+                self.density_plot_draw(data).savefig(file_path)
+    #            if os.access(filename, os.R_OK):
+                with open(file_path, 'rb') as fp:
+                         data = fp.read().encode('base64')
+
+                print sys.path[0]
+                IrAttachment = self.env['ir.attachment']
+                vals= dict(
+                            name=filename,
+                            datas_fname=filename,
+    #                        url=url_path,
+                            res_model='bnc.mining.kmeans',
+                            res_name=filename,
+                            res_id=self.id,
+                            type='binary',
+                            datas=data,
+                    )
+
+                IrAttachment.create(vals)
+            except Exception:
+                continue
+                # break
+                # raise
         return True
 
 

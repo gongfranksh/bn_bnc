@@ -14,7 +14,8 @@
                     </p>
                     <footer>
                         <button name="procure_sync_bnc" string="执行处理" type="object" class="btn-primary"/>
-                        <button name="sync_member_personal_information" string="跟新个人资料" type="object" class="btn-primary"/>
+                        <button name="sync_member_personal_information" string="更新个人资料" type="object" class="btn-primary"/>
+                        <button name="identify_personal" string="识别手机" type="object" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="取消 Cancel" />
                     </footer>
                 </form>

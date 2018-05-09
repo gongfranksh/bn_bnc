@@ -33,11 +33,27 @@
  
           <field name="OpenDate"/>          
           <field name="RegDate"/>  
-          <field name="Birthday"/>          
-          <field name="strSex"/>  
-          <field name="strStatus"/> 
-          </group> 
+          <field name="Birthday"/>
+          <field name="strSex"/>
+          <field name="strStatus"/>
+
+          <field name="nickname"/>
+          <field name="province"/>
+          <field name="city"/>
+          <field name="address"/>
+        </group>
           <group col="2">
+          <field name="phone_1"/>
+          <field name="phone_2"/>
+          <field name="phone_3"/>
+          <field name="phone_4"/>
+
+          <field name="phone_brand"/>
+          <field name="phone_os"/>
+          <field name="age_period"/>
+          </group>
+          <group col="2">
+
           <field name="tagsid" widget="many2many_tags"/>  
 		  </group>
 		</sheet>
