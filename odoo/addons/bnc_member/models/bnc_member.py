@@ -24,7 +24,7 @@ class bnc_member(models.Model):
 	strPhone= fields.Char(string=u'注册手机' )
 	strBncName= fields.Char(string=u'姓名' )
 #	strSex= fields.Char(string=u'性别' )
-	strSex= fields.Selection([('1', u'男性'), ('2', u'女性')],string=u'性别' )
+	strSex= fields.Selection([('0', u'未设置'),('1', u'男性'), ('2', u'女性')],string=u'性别' )
 
 	strEMail=fields.Char(string=u'邮箱地址' )
 	strProfessionl= fields.Char(string=u'职业')

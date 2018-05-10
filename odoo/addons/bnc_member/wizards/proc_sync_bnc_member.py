@@ -124,7 +124,7 @@ class proc_sync_bnc_member(models.TransientModel):
                 birthday, email, province, city, address,
                 vip_level_name, agent,stamp)  in mem_list:
 
-            #print mobile
+            print mobile
             member = self.env['bnc.member'].search([('strPhone', '=',mobile)])
             if member:
                 val={
@@ -139,7 +139,7 @@ class proc_sync_bnc_member(models.TransientModel):
                   'city':city,
                   'address':address,
                   'vip_level_name':vip_level_name,
-                 'strSex': sex,
+                 'strSex': str(sex),
                  'Birthday': birthday,
                  'mysqlstamp': stamp,
                 }
