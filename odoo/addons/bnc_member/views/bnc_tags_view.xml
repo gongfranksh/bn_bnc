@@ -57,7 +57,7 @@
 
 
     <!-- actions -->
-    <menuitem name=">用户标签维护" id="bnc_member.bnc_tags_menu" parent="bnc_member.bnc_tags_sub_menu"
+    <menuitem name="用户标签维护" id="bnc_member.bnc_tags_menu" parent="bnc_member.bnc_tags_sub_menu"
               action="bnc_member.action_bnc_tags"/>
 
 <!-- 

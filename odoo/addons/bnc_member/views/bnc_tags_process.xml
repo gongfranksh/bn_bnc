@@ -10,7 +10,8 @@
                         		标签运算处理.
                     </p>
                     <footer>
-                        <button name="seek_for_employee" string="内部员工" type="object" class="btn-primary"/>  
+                        <button name="seek_for_employee" string="内部员工" type="object" class="btn-primary"/>
+                        <button name="process_for_age" string="年龄段处理" type="object" class="btn-primary"/>
                     </footer>
                 </form>
             </field>
@@ -26,7 +27,7 @@
 
     <!-- actions -->
     <!-- actions -->
-    <menuitem name=">标签运算" id="bnc_member.bnc_tags_process_menu" parent="bnc_member.bnc_tags_sub_menu"
+    <menuitem name="标签运算" id="bnc_member.bnc_tags_process_menu" parent="bnc_member.bnc_tags_sub_menu"
               action="bnc_member.action_bnc_tag_proc"/>
 
     </data>

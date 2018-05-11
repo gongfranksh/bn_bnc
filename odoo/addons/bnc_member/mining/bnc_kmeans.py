@@ -18,7 +18,7 @@ from sklearn.cluster import KMeans
 from odoo.addons.bnc_member.office.bnc_report_pptx import bnc_report_ppt
 _logger = logging.getLogger(__name__)
 
-k = 5  # 聚类的类别
+k = 3  # 聚类的类别
 iteration = 100000  # 聚类最大循环次数
 pic_output = 'E://'
 
@@ -107,10 +107,11 @@ class bnc_mining_kmeans(models.Model):
     def density_plot(self):  # 自定义作图函数
         #    print data
         t=bnc_report_ppt()
-        ppt=t.create_ppt('ddd')
+        getdata=self._query_report_result()
+        ppt=t.create_ppt(getdata)
 
         ref = {
-            'filename': 'ddd.pptx',
+            'filename': u'%s-%s.pptx' % (self.code, self.name),
             'res_model': 'bnc.mining.kmeans',
             'res_id': self.id,
             'datas': ppt,
@@ -187,6 +188,20 @@ class bnc_mining_kmeans(models.Model):
                 'col_c': data['col_c'],
             })
         return vals
+
+    def _query_report_result(self):
+        sql="""
+                select col_c,count(*) as number  
+                from bnc_mining_kmeans_result 
+                where kmeansids={0}
+                group by col_c
+        """
+        sql=sql.format(self.id)
+        cr = self._cr
+        cr.execute(sql)
+        res=cr.fetchall()
+        return res
+
 
 
 class bnc_mining_kmeans_result(models.Model):
