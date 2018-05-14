@@ -81,7 +81,3 @@ class bnc_tag_process(models.TransientModel):
 
                 except Exception:
                     continue
-
-#                members = self.env['bnc.member'].search(tag['run_sql'])
-#                for i in members:
-#                        print i
