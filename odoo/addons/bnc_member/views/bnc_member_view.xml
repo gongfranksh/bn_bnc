@@ -1,129 +1,203 @@
-
 <odoo>
-  <data>
-    <record model="ir.ui.view" id="bnc_member.bnc_memeber_list">
-      <field name="name">百乐卡清册</field>
-      <field name="model">bnc.member</field>
-      <field name="arch" type="xml">
-        <tree>
+    <data>
+        <record model="ir.ui.view" id="bnc_member.bnc_memeber_list">
+            <field name="name">百乐卡清册</field>
+            <field name="model">bnc.member</field>
+            <field name="arch" type="xml">
+                <tree>
 
-		 <field string="百乐卡编号" name="resid"/> 
-		  <field name="strPhone" password="True"/>          
-          <field name="tagsid" widget="many2many_tags"/>  
+                    <field string="百乐卡编号" name="resid"/>
+                    <field name="strPhone" password="True"/>
+                    <field name="tagsid" widget="many2many_tags"/>
 
-        </tree>
-      </field>
-    </record>
-    
-    
-    
-    <record model="ir.ui.view" id="bnc_member.view_bnc_member_form">
-      <field name="name">百乐卡会员资料</field>
-      <field name="model">bnc.member</field>
-      <field name="arch" type="xml">
-        <form>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="bnc_member.view_bnc_member_form">
+            <field name="name">百乐卡会员资料</field>
+            <field name="model">bnc.member</field>
+            <field name="arch" type="xml">
+                <form>
                     <header>
                     </header>
                     <sheet>
-                    <group col="4">
-          <field string="百乐卡编号" name="resid"/>          
-          <field name="strBncName"/>
-          <field name="strPhone" password="True"/>          
-          <field name="strProfessionl"/>          
- 
-          <field name="OpenDate"/>          
-          <field name="RegDate"/>  
-          <field name="Birthday"/>
-          <field name="strSex"/>
-          <field name="strStatus"/>
+                        <group col="4">
+                            <field string="百乐卡编号" name="resid"/>
+                            <field name="strBncName"/>
+                            <field name="strPhone" password="True"/>
+                            <field name="strProfessionl"/>
 
-          <field name="nickname"/>
-          <field name="province"/>
-          <field name="city"/>
-          <field name="address"/>
-        </group>
-          <group col="2">
-          <field name="phone_1"/>
-          <field name="phone_2"/>
-          <field name="phone_3"/>
-          <field name="phone_4"/>
+                            <field name="OpenDate"/>
+                            <field name="RegDate"/>
+                            <field name="Birthday"/>
+                            <field name="strSex"/>
+                            <field name="strStatus"/>
 
-          <field name="phone_brand"/>
-          <field name="phone_os"/>
-          <field name="age_period"/>
-          </group>
-          <group col="2">
+                            <field name="nickname"/>
+                            <field name="province"/>
+                            <field name="city"/>
+                            <field name="address"/>
+                        </group>
+                        <group col="2">
+                            <field name="phone_1"/>
+                            <field name="phone_2"/>
+                            <field name="phone_3"/>
+                            <field name="phone_4"/>
 
-          <field name="tagsid" widget="many2many_tags"/>  
-		  </group>
-		</sheet>
-		          
-        </form>
-      </field>
-    </record>
+                            <field name="phone_brand"/>
+                            <field name="phone_os"/>
+                            <field name="age_period"/>
+                        </group>
+                        <group col="2">
+                            <field name="tagsid" widget="many2many_tags"/>
+                            <!--
 
-      <record model="ir.ui.view" id="bnc_member.view_bnc_member_kanban">
+
+
+                                                        <field name="tagsid" widget="many2many_kanban">
+                                                            <kanban quick_create="false" create="true">
+                                                                <field name="name"/>
+                                                                <templates>
+                                                                    <t t-name="kanban-box">
+                                                                        <div style="position: relative">
+                                                                            <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">X</a>
+                                                                            <div class="oe_module_vignette">
+                                                                                <div class="oe_module_desc">
+                                                                                    <field name="name"/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </t>
+                                                                </templates>
+                                                            </kanban>
+                                                        </field>
+                                 -->
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="bnc_member.view_bnc_member_kanban">
             <field name="name">百乐卡资料</field>
             <field name="model">bnc.member</field>
             <field name="arch" type="xml">
-                <kanban  default_order= "strBncCardid" class="o_kanban_small_column">
-			          <field string="百乐卡编号" name="resid"/>          
-			          <field name="strBncName"/>
-			          <field name="strPhone" password="True"/>          
-			          <field name="strProfessionl"/>          
-			          <field name="OpenDate"/>          
-			          <field name="RegDate"/>  
-			          <field name="Birthday"/>          
-			          <field name="strSex"/>  
-			          <field name="strStatus"/> 
-			          <field name="strBncCardid"/> 
-			          <field name="tagsid" />
-			     <templates>
-			        <t t-name="kanban-box">        
-					<div t-attf-class="#{kanban_color(record.tagsid.raw_value)} oe_kanban_global_click">
-							  <div class="o_dropdown_kanban dropdown">
-							      <!--top-right drop down menu here-->
-							    </div>							    
-							    
-						      <div class="oe_kanban_content">
-						      
-						      
-						         <div class="oe_kanban_footer">
-						            
-						            <div>
-						            <field string="百乐卡编号" name="resid"/> 
-						            </div>
-						            
-						            <div>
-						             <field name="tagsid" widget="many2many_tags"/>
-						            </div>
-						          
-						          </div>
+                <kanban default_order="strBncCardid" class="o_kanban_small_column">
+                    <field string="百乐卡编号" name="resid"/>
+                    <field name="strBncName"/>
+                    <field name="strPhone" password="True"/>
+                    <field name="strProfessionl"/>
+                    <field name="OpenDate"/>
+                    <field name="RegDate"/>
+                    <field name="Birthday"/>
+                    <field name="strSex"/>
+                    <field name="strStatus"/>
+                    <field name="strBncCardid"/>
+                    <field name="nickname"/>
 
 
-						      </div> <!-- oe_kanban_content -->
+                    <field name="tagsid"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="#{kanban_color(record.tagsid.raw_value)} oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown">
+                                    <!--top-right drop down menu here-->
+                                </div>
+
+                                <div class="oe_kanban_content">
+
+                                    <div class="oe_kanban_details">
+                                        <strong class="oe_partner_heading">
+                                            <p>
+                                                <field string="百乐卡编号" name="resid"/>
+                                            </p>
+                                            <!--
+                                            <field name="strPhone"/>
+                                            -->
+
+                                        </strong>
+
+                                        <field name="nickname"/>
+                                        <field name="strSex"/>
 
 
-        					  <div class="oe_clear"/>
+                                        <field name="tagsid" >
+                                            <kanban quick_create="false" create="true">
+                                                <field name="name"/>
+                                                <templates>
+                                                    <t t-name="kanban-box">
+                                                        <div style="position: relative">
+                                                            <a t-if="! read_only_mode" type="delete"
+                                                               style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
+                                                                X
+                                                            </a>
+                                                            <div class="oe_module_vignette">
+                                                                <div class="oe_module_desc">
+                                                                    <field name="name"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </templates>
+                                            </kanban>
+                                        </field>
 
 
-               				</div> 
-			        </t>
-			     </templates>
+                                        <!--
+                                        <field name="tagsid" widget="many2many_tags" />
+                                        <li t-if="record.tagsid.raw_value">
+                                            <span t-field ="tagsid.raw_value" >
+                                            </span>
+                                        </li>
+                                        <li t-if="record.tagsid.raw_value"></li>
+                                           <t t-foreach="record.tagsid.raw_value" t-as="tags">
+                                            <t t-field="tags"/>
+                                            <t t-esc="tags"/>
+                                            <t t-raw="tags"/>
+                                            <t t-field="tags.name"/>
+                                        </t>
+                                            <li t-field="tagsid"></li>
+                                        <li t-if="record.tagsid.raw_value">
+                                            <field name="tagsid" type="xml">
+                                            </field>
+                                        </li>
+
+                                        -->
+
+                                    </div>
+
+
+                                    <div class="oe_kanban_footer">
+
+                                    </div>
+
+
+                                </div> <!-- oe_kanban_content -->
+
+
+                                <div class="oe_clear"/>
+
+
+                            </div>
+                        </t>
+                    </templates>
                 </kanban>
             </field>
         </record>
 
-    
-    
-    <!-- actions opening views on models -->
-    <record model="ir.actions.act_window" id="bnc_member.bnc_member_action_window">
-      <field name="name">百乐卡资料 </field>
-      <field name="res_model">bnc.member</field>
-      <field name="view_mode">kanban,tree,form</field>
-    </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="bnc_member.bnc_member_action_window">
+            <field name="name">百乐卡资料</field>
+            <field name="res_model">bnc.member</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
         <!-- actions -->
-    <menuitem name="百乐卡资料" id="bnc_member.bnc_mem_menu" parent="bnc_member.bnc_mem_sub_menu"
-              action="bnc_member.bnc_member_action_window"/>
-  </data>
+        <menuitem name="百乐卡资料" id="bnc_member.bnc_mem_menu" parent="bnc_member.bnc_mem_sub_menu"
+                  action="bnc_member.bnc_member_action_window"/>
+    </data>
 </odoo>

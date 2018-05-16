@@ -9,7 +9,7 @@ class bnc_tags(models.Model):
 
 	code = fields.Char(string=u'标签编号')
 	name = fields.Char(string=u'名称')
-	color = fields.Integer('Color Index')
+	color = fields.Integer(string="Color",help="Choose your color")
 	cateids= fields.Many2one('bnc.tags.category',string=u'所属分类')
 	isActive= fields.Boolean(string=u'有效标记')
 	activeDate= fields.Datetime(string=u'生效日期')
@@ -30,6 +30,6 @@ class bnc_tags_log(models.Model):
 	_name ="bnc.tags.log"
 	tagids= fields.Many2one('bnc.tags',string=u'标签')
 	mem_ids= fields.Many2one('bnc.member',string=u'会员')	
-	rundate= fields.Datetime(string=u'最近一次执行日期')	
-	
-	
+	rundate= fields.Datetime(string=u'最近一次执行日期')
+
+
