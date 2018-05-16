@@ -60,6 +60,18 @@ class bnc_member(models.Model):
 	phone_status=fields.Boolean(string=u'手机信息更新状态', default=False )
 	age_period =fields.Integer(compute='_compute_age',string=u'年龄段')
 
+	pos_order_count = fields.Integer(
+		compute='_compute_pos_order',
+		string=u'交易数',
+		help="The number of point of sale orders related to this customer",
+	)
+
+
+	tags_name = fields.Char(
+		compute='_compute_tags_name',
+		string=u'标签名称合并',
+	)
+
 	@api.one
 	def query_bnc_member_timestamp(self):
 		select_str = """
@@ -75,9 +87,45 @@ class bnc_member(models.Model):
                 d1= datetime.datetime.strptime(self.Birthday,'%Y-%m-%d %H:%M:%S')
             else:
                 d1 = datetime.date.today()
-
             d2= datetime.date.today()
             self.age_period=d2.year-d1.year
+
+	@api.depends('resid')
+	def _compute_pos_order(self):
+		res=[]
+		for mem in self:
+			res.append(mem["resid"].ids)
+
+		partners_data = self.env['pos.order'].read_group([('partner_id', 'in', res)], ['partner_id'],
+														 ['partner_id'])
+		mapped_data = dict([(partner['partner_id'][0], partner['partner_id_count']) for partner in partners_data])
+		for member in self:
+			member.pos_order_count = mapped_data.get(member.resid.id, 0)
+
+
+	@api.depends('tagsid')
+	def _compute_tags_name(self):
+		member_data=[]
+		for mem in self:
+			label_tag=''
+			for tag in mem["tagsid"]:
+				tag_f=self.env['bnc.tags'].search([('id','=',tag.id)])
+				if tag_f:
+
+					# print len(label_tag)
+					if  len(label_tag)<>0:
+						label_tag= label_tag  +'||'+tag_f["name"]
+					else:
+						label_tag=tag_f["name"]
+
+			member_data.append((mem.id,label_tag))
+
+		mapped_data = dict([(mem[0], mem[1]) for mem in member_data ])
+
+		for member in self:
+			print member.id
+			member.tags_name = mapped_data.get(member.id, 0)
+
 
 
 

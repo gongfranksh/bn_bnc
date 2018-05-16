@@ -8,7 +8,9 @@
 
                     <field string="百乐卡编号" name="resid"/>
                     <field name="strPhone" password="True"/>
+                    <field name="pos_order_count"/>
                     <field name="tagsid" widget="many2many_tags"/>
+
 
                 </tree>
             </field>
@@ -51,11 +53,9 @@
                             <field name="age_period"/>
                         </group>
                         <group col="2">
+                            <field name="pos_order_count"/>
                             <field name="tagsid" widget="many2many_tags"/>
                             <!--
-
-
-
                                                         <field name="tagsid" widget="many2many_kanban">
                                                             <kanban quick_create="false" create="true">
                                                                 <field name="name"/>
@@ -97,9 +97,9 @@
                     <field name="strStatus"/>
                     <field name="strBncCardid"/>
                     <field name="nickname"/>
-
-
+                    <field name="pos_order_count"/>
                     <field name="tagsid"/>
+                    <field name="tags_name"/>
 
                     <templates>
                         <t t-name="kanban-box">
@@ -114,18 +114,16 @@
                                         <strong class="oe_partner_heading">
                                             <p>
                                                 <field string="百乐卡编号" name="resid"/>
-                                            </p>
-                                            <!--
-                                            <field name="strPhone"/>
-                                            -->
 
+                                            </p>
                                         </strong>
 
                                         <field name="nickname"/>
                                         <field name="strSex"/>
 
 
-                                        <field name="tagsid" >
+                                        <field name="tagsid">
+                                            <!--
                                             <kanban quick_create="false" create="true">
                                                 <field name="name"/>
                                                 <templates>
@@ -144,34 +142,25 @@
                                                     </t>
                                                 </templates>
                                             </kanban>
+                                            -->
                                         </field>
-
-
-                                        <!--
-                                        <field name="tagsid" widget="many2many_tags" />
-                                        <li t-if="record.tagsid.raw_value">
-                                            <span t-field ="tagsid.raw_value" >
-                                            </span>
-                                        </li>
-                                        <li t-if="record.tagsid.raw_value"></li>
-                                           <t t-foreach="record.tagsid.raw_value" t-as="tags">
-                                            <t t-field="tags"/>
-                                            <t t-esc="tags"/>
-                                            <t t-raw="tags"/>
-                                            <t t-field="tags.name"/>
-                                        </t>
-                                            <li t-field="tagsid"></li>
-                                        <li t-if="record.tagsid.raw_value">
-                                            <field name="tagsid" type="xml">
-                                            </field>
-                                        </li>
-
-                                        -->
 
                                     </div>
 
 
                                     <div class="oe_kanban_footer">
+                                        <xpath>
+                                            <span  t-if="record.tags_name.value!=''" class="badge">
+                                                <t t-esc="record.tags_name.value"/>
+                                            </span>
+                                        </xpath>
+                                        <xpath expr="//div[@class='oe_kanban_partner_links']" position="inside">
+                                            <span t-if="record.pos_order_count.value>0" class="badge">
+                                                <i class="fa fa-fw fa-shopping-bag"/>
+                                                <t t-esc="record.pos_order_count.value"/>
+                                            </span>
+                                        </xpath>
+
 
                                     </div>
 
