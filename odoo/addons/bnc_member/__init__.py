@@ -7,3 +7,4 @@ from . import tagprocess
 from . import lead
 from . import mining
 from . import office
+from . import report

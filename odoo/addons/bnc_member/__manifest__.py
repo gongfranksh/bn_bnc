@@ -34,6 +34,7 @@
         'views/bnc_lead_assign.xml',
         'views/bnc_mining.xml',
         'views/report_bnc_member_kmeans.xml',
+        'views/report_bnc_member_tag_report.xml',
         'wizards/proc_sync_bnc_member.xml',
         'wizards/proc_sync_jsport.xml',
         'wizards/proc_sync_buynow.xml',
@@ -44,14 +45,6 @@
         'data/company_data.xml',
         'data/user_data.xml',
         'data/bn_db_data.xml',
-#        'views/jsp_mem_card.xml',
-#        'views/bn_mem_car.xml',
-#        'views/btw_mem_card.xml',
-#        'views/cof_mem_card.xml',        
-#        'views/gam_mem_card.xml',    
- #       'views/hos_mem_card.xml',    
-
-#        'views/templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
