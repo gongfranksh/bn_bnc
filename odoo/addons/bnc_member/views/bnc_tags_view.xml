@@ -36,7 +36,7 @@
 		          
 		          <group col="2">
 		          <field name="rundate" />
-		          <field name="run_sql"/>
+		          <field name="run_sql" />
 		          <field name="run_method"/>
 		          <field name="memo"/>
 

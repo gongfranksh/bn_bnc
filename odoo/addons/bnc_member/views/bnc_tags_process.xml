@@ -12,6 +12,7 @@
                     <footer>
                         <button name="seek_for_employee" string="内部员工" type="object" class="btn-primary"/>
                         <button name="process_for_age" string="年龄段处理" type="object" class="btn-primary"/>
+                        <button name="process_for_period" string="交易周期处理" type="object" class="btn-primary"/>
                     </footer>
                 </form>
             </field>
