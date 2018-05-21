@@ -25,6 +25,7 @@ class proc_bnc_lead(models.TransientModel):
             [('buid', 'in', buid), ('partner_id', '<>', None), ('date_order', '>=', para_start),
              ('date_order', '<=', para_end)])
 
+
         memlist = []
         for rec in records:
             memlist.append(rec['partner_id'].id)
