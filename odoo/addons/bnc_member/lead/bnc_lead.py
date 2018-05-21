@@ -48,6 +48,7 @@ class bnc_lead(models.Model):
         return res
 
     def union_list(self, tags):
+        # TODO union_list 合并记录
         mem_list = []
         for tag in tags:
             sql = """
