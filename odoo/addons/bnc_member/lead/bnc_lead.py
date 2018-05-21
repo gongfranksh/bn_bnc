@@ -41,10 +41,8 @@ class bnc_lead(models.Model):
         tags = self.env['bnc.tags.template'].search([('id', '=', self.tag_template_id.id)])
         if para_type == 'BASE':
             res = self.union_list(tags['base_tagids'])
-
         if para_type == 'COND':
             res = self.union_list(tags['cond_tagids'])
-
         return res
 
     def union_list(self, tags):
