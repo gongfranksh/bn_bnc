@@ -23,10 +23,11 @@
       <field name="arch" type="xml">
         <form>
                     <header>
-                    <button name="action_kmeans" string="开始计算" type="object" states="draft" class="btn-primary" 
+                    <button name="action_kmeans" string="开始筛选" type="object" states="draft" class="btn-primary"
                         attrs="{'invisible': [('state', '=', 'done')]}"/>                            
-                    <button name="density_plot" string="图形显示" type="object" states="draft" class="btn-primary" 
+                    <button name="density_plot" string="图形显示" type="object" states="draft" class="btn-primary"
                         attrs="{'invisible': [('state', '!=', 'done')]}"/> 
+
                     </header>
                     <sheet>
                     <group col="4">

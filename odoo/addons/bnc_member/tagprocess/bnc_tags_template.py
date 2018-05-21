@@ -15,5 +15,6 @@ class bnc_tags_template(models.Model):
     code = fields.Char(string=u'编号')
     memo = fields.Text(string=u'备注说明')
     isActive = fields.Boolean(string=u'有效标记')
-    tagids = fields.Many2many('bnc.tags', 'bnc_tags_template_rel', 'templateid', 'tagid', string=u'需要选择的标签')
+    base_tagids = fields.Many2many('bnc.tags', 'bnc_tags_base_template_rel', 'templateid', 'tagid', string=u'基础标签')
+    cond_tagids = fields.Many2many('bnc.tags', 'bnc_tags_cond_template_rel', 'templateid', 'tagid', string=u'条件标签')
     resultType = fields.Selection([('0', u'合并集合'),('1', u'交叉集合')],string=u'集合结果类型' )

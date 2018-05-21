@@ -23,7 +23,13 @@
       <field name="model">bnc.lead</field>
       <field name="arch" type="xml">
         <form>
-                            <header>
+                           <header>
+                    <button name="select_memeber_set" string="开始筛选" type="object" states="draft" class="btn-primary"
+                        attrs="{'invisible': [('state', '=', 'done')]}"/>
+   <!--
+                    <button name="density_plot" string="图形显示" type="object" states="draft" class="btn-primary"
+                        attrs="{'invisible': [('state', '!=', 'done')]}"/>
+       -->
                     </header>
                     <sheet>
                     <group col="4">
@@ -33,11 +39,12 @@
 		          <field name="state"/>			          
 		          <field name="start"/>
 		          <field name="end"/>
-	          
+		          <field name="tag_template_id"/>
 		                              
 		          </group>
                     <group col="2">
-、		          <field name="crmleadid">
+
+		          <field name="crmleadid">
 					<tree>
 					<field name="name"/>
 					<field name="partner_id"/>
