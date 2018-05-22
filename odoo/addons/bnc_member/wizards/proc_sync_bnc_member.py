@@ -10,7 +10,6 @@ from odoo import api, models, tools, registry
 from BNmssql import Bnc_read_SQLCa
 from BNmysql import Bnc_Mysql_SQLCa
 
-
 # from idlelib.SearchEngine import get
 
 _logger = logging.getLogger(__name__)
@@ -114,36 +113,66 @@ class proc_sync_bnc_member(models.TransientModel):
         return True
 
     def sync_member_personal_information(self):
-        print 'sync_member_personal_information'
-        db=self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
-        print db['db_ip']
-        print db['db_name']
+        # TODO  'sync_member_personal_information'
+        db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
 
-        mem_list=self.get_personal_recordset(Bnc_Mysql_SQLCa(db[0]))
-        for (mobile,bu_name, wxid, unionid, openid, nickname, sex,
-                birthday, email, province, city, address,
-                vip_level_name, agent,stamp)  in mem_list:
+        mem_list = self.get_personal_recordset(Bnc_Mysql_SQLCa(db[0]))
+        for (mobile, bu_name, wxid, unionid, openid, nickname, sex,
+             birthday, email, province, city, address,
+             vip_level_name, agent, stamp) in mem_list:
 
-            print mobile
-            member = self.env['bnc.member'].search([('strPhone', '=',mobile)])
+            member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
             if member:
-                val={
-                  'wxid':wxid,
-                  'unionid':unionid,
-                  'openid':openid,
-                  'nickname':nickname,
-                  'agent':agent,
-                  'bu_name':bu_name,
-                  'strEMail': email,
-                  'province':province,
-                  'city':city,
-                  'address':address,
-                  'vip_level_name':vip_level_name,
-                 'strSex': str(sex),
-                 'Birthday': birthday,
-                 'mysqlstamp': stamp,
+                val = {
+                    'wxid': wxid,
+                    'unionid': unionid,
+                    'openid': openid,
+                    'nickname': nickname,
+                    'agent': agent,
+                    'bu_name': bu_name,
+                    'strEMail': email,
+                    'province': province,
+                    'city': city,
+                    'address': address,
+                    'vip_level_name': vip_level_name,
+                    'strSex': str(sex),
+                    'Birthday': birthday,
+                    'mysqlstamp': stamp,
                 }
                 member.write(val)
+        return True
+
+    def sync_member_personal_mp_weixin(self):
+        # TODO  'sync_member_personal_mp_weixin'
+        db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
+        mem_list = self.get_personal_mp_weixin(Bnc_Mysql_SQLCa(db[0]))
+        for (mobile, reg, bu_id, bu_name, shopid, codeid, stamp
+             ) in mem_list:
+
+            member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
+            if member:
+                bnc_member_id = member.id
+            else:
+                bnc_member_id = None
+
+            company = self.env['res.company'].search([('mp_bucode', '=', bu_id)])
+            if company:
+                bnc_company_id = company.id
+            else:
+                bnc_company_id = None
+
+            val = {
+                'strPhone': mobile,
+                'RegDate': reg,
+                'strBuId': bu_id,
+                'strBuName': bu_name,
+                'strshopid': shopid,
+                'strcodeid': codeid,
+                'timestamp': stamp,
+                'belong_bnc_member': bnc_member_id,
+                'belong_company': bnc_company_id,
+            }
+            self.env['bnc.mobile.bu'].create(val)
         return True
 
     def get_personal_recordset(self, ms):
@@ -164,25 +193,44 @@ class proc_sync_bnc_member(models.TransientModel):
                 where unix_timestamp(update_time)>{0}
                 order by update_time desc
                   """
-        sql=sql.format(start_stamp)
+        sql = sql.format(start_stamp)
+        res = ms.ExecQuery(sql.encode('utf-8'))
+        return res
+
+    def get_personal_mp_weixin(self, ms):
+        # 获取更新记录范围，本地库的时间戳和服务端时间戳
+        query_local = " select max(timestamp) as maxnum from bnc_mobile_bu"
+        cr = self._cr
+        cr.execute(query_local)
+        for local_max_num in cr.fetchall():
+            start_stamp = local_max_num[0]
+            if local_max_num[0] is None:
+                start_stamp = 0
+        sql = """
+                select mobile,reg,bu_id,bu_name,shopid,codeid,unix_timestamp(reg)
+                from v_mobile_bu
+                where unix_timestamp(reg)>{0}
+                order by unix_timestamp(reg) 
+                  """
+        sql = sql.format(start_stamp)
         res = ms.ExecQuery(sql.encode('utf-8'))
         return res
 
     def identify_personal(self):
-        recordset=self.env['bnc.member'].search([('phone_status','!=','True')])
-        for rec in recordset :
+        recordset = self.env['bnc.member'].search([('phone_status', '!=', 'True')])
+        for rec in recordset:
             if rec['agent']:
-               info=rec['agent']
+                info = rec['agent']
             else:
-               info=''
+                info = ''
 
-            result=self.re_phone(info)
-            if len(result)<>0 :
-                if len(result)==2:
-                    val={
-                        'phone_1':result[0],
-                        'phone_2':result[1],
-                        'phone_status':True
+            result = self.re_phone(info)
+            if len(result) <> 0:
+                if len(result) == 2:
+                    val = {
+                        'phone_1': result[0],
+                        'phone_2': result[1],
+                        'phone_status': True
                     }
                 if len(result) == 4:
                     val = {
@@ -196,20 +244,18 @@ class proc_sync_bnc_member(models.TransientModel):
 
         return True
 
-    def re_phone(self,agent):
-        if len(agent) <> 0 :
+    def re_phone(self, agent):
+        if len(agent) <> 0:
             res = re.findall(r'[^()]+', agent)
             phone = re.split(r';', res[1])
         else:
-            phone ={}
+            phone = {}
         return phone
 
     @api.multi
     def procure_sync_bnc(self):
-
-        #       bnc_member = self.env['bnc.member']
-        #       bnc_member.sync_bnc_member
-        #        threaded_calculation = threading.Thread(target=self.sync_bnc_member, args=())
-        #        threaded_calculation.start()
-        self._sync_bnc_member()
+        self.env['proc.sync.bnc.member']._sync_bnc_member()
+        self.env['proc.sync.bnc.member'].identify_personal()
+        self.env['proc.sync.bnc.member'].sync_member_personal_information()
+        self.env['proc.sync.bnc.member'].sync_member_personal_mp_weixin()
         return {'type': 'ir.actions.act_window_close'}

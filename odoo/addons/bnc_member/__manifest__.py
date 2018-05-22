@@ -34,6 +34,7 @@
         'views/bnc_lead_view.xml',
         'views/bnc_lead_assign.xml',
         'views/bnc_mining.xml',
+        'views/res_company.xml',
         'views/report_bnc_member_kmeans.xml',
         'views/report_bnc_member_tag_report.xml',
         'wizards/proc_sync_bnc_member.xml',

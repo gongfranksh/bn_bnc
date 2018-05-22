@@ -1,112 +1,144 @@
 <odoo>
-        <record id="company_id_100" model="res.company">
-            <field  name="name">乐之广州店</field>
-            <field  name="bncode">01001</field>
-            <field  name="buid">1</field>
-        </record>
+    <record id="company_id_100" model="res.company">
+        <field name="name">乐之广州店</field>
+        <field name="bncode">01001</field>
+        <field name="buid">1</field>
+        <field name="mp_bucode">020001</field>
+        <field name="mp_buname">乐之in广州</field>
 
-        <record id="company_id_200" model="res.company">
-            <field  name="name">乐之上海店</field>
-            <field  name="bncode">01002</field>
-            <field  name="buid">1</field>
-        </record>
+    </record>
 
-
-        <record id="company_id_300" model="res.company">
-            <field  name="name">乐之合肥店</field>
-            <field  name="bncode">01003</field>
-            <field  name="buid">1</field>
-        </record>
+    <record id="company_id_200" model="res.company">
+        <field name="name">乐之上海店</field>
+        <field name="bncode">01002</field>
+        <field name="buid">1</field>
+        <field name="mp_bucode">021003</field>
+        <field name="mp_buname">乐之in上海</field>
+    </record>
 
 
-        <record id="company_id_400" model="res.company">
-            <field  name="name">乐之杭州移动营业厅</field>
-            <field  name="bncode">01004</field>
-            <field  name="buid">1</field>
-        </record>
-        <record id="company_id_500" model="res.company">
-            <field  name="name">乐之天津店</field>
-            <field  name="bncode">01005</field>
-            <field  name="buid">1</field>
-        </record>
-        
-        <record id="company_id_600" model="res.company">
-            <field  name="name">百脑汇上海店</field>
-            <field  name="bncode">02001</field>
-            <field  name="buid">2</field>
-        </record>
-       <record id="company_id_700" model="res.company">
-            <field  name="name">百脑汇天津店</field>
-            <field  name="bncode">02002</field>
-             <field  name="buid">2</field>
-        </record>
-        
-       <record id="company_id_800" model="res.company">
-            <field  name="name">上海翼世纪电竞馆</field>
-            <field  name="bncode">shysj1</field>
-            <field  name="buid">4</field>
-        </record>
-
-       <record id="company_id_900" model="res.company">
-            <field  name="name">沈阳翼世纪电竞馆</field>
-            <field  name="bncode">syysjdjg</field>
-            <field  name="buid">4</field>
-        </record>
+    <record id="company_id_300" model="res.company">
+        <field name="name">乐之合肥店</field>
+        <field name="bncode">01003</field>
+        <field name="buid">1</field>
+        <field name="mp_bucode">055102</field>
+        <field name="mp_buname">百脑汇合肥店</field>
+    </record>
 
 
+    <record id="company_id_400" model="res.company">
+        <field name="name">乐之杭州移动营业厅</field>
+        <field name="bncode">01004</field>
+        <field name="buid">1</field>
+    </record>
+    <record id="company_id_500" model="res.company">
+        <field name="name">乐之天津店</field>
+        <field name="bncode">01005</field>
+        <field name="buid">1</field>
+        <field name="mp_bucode">022002</field>
+        <field name="mp_buname">乐之in天津</field>
+    </record>
 
-        
-       <record id="company_id_1000" model="res.company">
-            <field  name="name">翼世纪电竞馆郑州店</field>
-            <field  name="bncode">zzysjdjg</field>
-            <field  name="buid">4</field>
-        </record>  
-       <record id="company_id_1100" model="res.company">
-            <field  name="name">厦门翼世纪电竞馆</field>
-            <field  name="bncode">xmysjdjg</field>
-            <field  name="buid">4</field>
-        </record>         
-       <record id="company_id_1200" model="res.company">
-            <field  name="name">广州翼世纪电竞馆</field>
-            <field  name="bncode">gzysjdjg</field>
-            <field  name="buid">4</field>
-        </record>      
-       <record id="company_id_1300" model="res.company">
-            <field  name="name">合肥翼世纪电竞馆'</field>
-            <field  name="bncode">hfysjdjg</field>
-            <field  name="buid">4</field>           
-        </record>      
+    <record id="company_id_600" model="res.company">
+        <field name="name">百脑汇上海店</field>
+        <field name="bncode">02001</field>
+        <field name="buid">2</field>
+        <field name="mp_bucode">021002</field>
+        <field name="mp_buname">上海百脑汇</field>
+
+    </record>
+    <record id="company_id_700" model="res.company">
+        <field name="name">百脑汇天津店</field>
+        <field name="bncode">02002</field>
+        <field name="buid">2</field>
+        <field name="mp_bucode">022001</field>
+        <field name="mp_buname">百脑汇天津店</field>
+
+    </record>
+
+    <record id="company_id_800" model="res.company">
+        <field name="name">上海翼世纪电竞馆</field>
+        <field name="bncode">shysj1</field>
+        <field name="buid">4</field>
+        <field name="mp_bucode">021005</field>
+        <field name="mp_buname">上海百脑汇翼世纪电竞馆</field>
+
+    </record>
+
+    <record id="company_id_900" model="res.company">
+        <field name="name">沈阳翼世纪电竞馆</field>
+        <field name="bncode">syysjdjg</field>
+        <field name="buid">4</field>
+    </record>
 
 
-       <record id="company_id_1400" model="res.company">
-            <field  name="name">天津翼世纪电竞馆</field>
-            <field  name="bncode">tjysjdjg</field>
-            <field  name="buid">4</field>
-        </record>  
+    <record id="company_id_1000" model="res.company">
+        <field name="name">翼世纪电竞馆郑州店</field>
+        <field name="bncode">zzysjdjg</field>
+        <field name="buid">4</field>
+    </record>
+    <record id="company_id_1100" model="res.company">
+        <field name="name">厦门翼世纪电竞馆</field>
+        <field name="bncode">xmysjdjg</field>
+        <field name="buid">4</field>
+    </record>
+    <record id="company_id_1200" model="res.company">
+        <field name="name">广州翼世纪电竞馆</field>
+        <field name="bncode">gzysjdjg</field>
+        <field name="buid">4</field>
+        <field name="mp_bucode">020003</field>
+        <field name="mp_buname">广州翼世纪公众号</field>
+    </record>
+    <record id="company_id_1300" model="res.company">
+        <field name="name">合肥翼世纪电竞馆'</field>
+        <field name="bncode">hfysjdjg</field>
+        <field name="buid">4</field>
+    </record>
 
-       <record id="company_id_1500" model="res.company">
-            <field  name="name">成都翼世纪电竞馆</field>
-            <field  name="bncode">cdysjdjg</field>
-            <field  name="buid">4</field>
-        </record>
-        
-       <record id="company_id_2000" model="res.company">
-            <field  name="name">乐之咖啡上海店</field>
-            <field  name="bncode">131360</field>
-            <field  name="buid">3</field>
-        </record>
-        
-       <record id="company_id_2100" model="res.company">
-            <field  name="name">乐之咖啡天津店</field>
-            <field  name="bncode">00241638</field>
-            <field  name="buid">3</field>
-        </record>
 
-       <record id="company_id_2200" model="res.company">
-            <field  name="name">比吞斯</field>
-            <field  name="bncode">131363</field>
-            <field  name="buid">6</field>
-        </record>
+    <record id="company_id_1400" model="res.company">
+        <field name="name">天津翼世纪电竞馆</field>
+        <field name="bncode">tjysjdjg</field>
+        <field name="buid">4</field>
+        <field name="mp_bucode">022004</field>
+        <field name="mp_buname">天津百脑汇翼世纪电竞馆</field>
 
+    </record>
+
+    <record id="company_id_1500" model="res.company">
+        <field name="name">成都翼世纪电竞馆</field>
+        <field name="bncode">cdysjdjg</field>
+        <field name="buid">4</field>
+    </record>
+
+    <record id="company_id_2000" model="res.company">
+        <field name="name">乐之咖啡上海店</field>
+        <field name="bncode">131360</field>
+        <field name="buid">3</field>
+        <field name="mp_bucode">021004</field>
+        <field name="mp_buname">上海乐之精品咖啡</field>
+    </record>
+
+    <record id="company_id_2100" model="res.company">
+        <field name="name">乐之咖啡天津店</field>
+        <field name="bncode">00241638</field>
+        <field name="buid">3</field>
+    </record>
+
+    <record id="company_id_2200" model="res.company">
+        <field name="name">比吞斯</field>
+        <field name="bncode">131363</field>
+        <field name="buid">6</field>
+        <field name="mp_bucode">021001</field>
+        <field name="mp_buname">Betweens公众号</field>
+    </record>
+
+    <record id="company_id_2300" model="res.company">
+        <field name="name">百脑汇广州店</field>
+        <field name="bncode">1071</field>
+        <field name="buid">2</field>
+        <field name="mp_bucode">020002</field>
+        <field name="mp_buname">百脑汇广州店</field>
+    </record>
 
 </odoo>

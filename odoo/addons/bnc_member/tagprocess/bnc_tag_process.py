@@ -111,3 +111,39 @@ class bnc_tag_process(models.TransientModel):
                 except Exception:
                     continue
 
+    def process_for_company(self):
+        _logger.info("process_for_company")
+        tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByCompany'), ('isActive', '=', True)])
+        cr = self._cr
+        for tag in tag_list:
+            # 删除原来的标签
+            exec_sql = """
+               delete from bnc_tags_member_rel where tagid ={0}
+            """
+            exec_sql = exec_sql.format(tag['id'])
+            cr.execute(exec_sql)
+
+            if tag['isRunScript']:
+                sql = tag['run_sql']
+                try:
+                    cr.execute(sql)
+                    result = cr.fetchall()
+                    for rec in result:
+                        mem = self.env['bnc.member'].search([('id', '=', rec[0])])
+                        if mem:
+                            tags = []
+                            tags.append((4, tag.id))
+                            mem.write({'tagsid': tags})
+
+                except Exception:
+                    continue
+
+
+    def process_for_all(self):
+        _logger.info("process_for_all")
+        self.env['bnc.tag.process'].seek_for_employee()
+        self.env['bnc.tag.process'].process_for_age()
+        self.env['bnc.tag.process'].process_for_period()
+        self.env['bnc.tag.process'].process_for_company()
+
+

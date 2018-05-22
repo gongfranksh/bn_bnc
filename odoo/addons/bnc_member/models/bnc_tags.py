@@ -16,11 +16,12 @@ class bnc_tags(models.Model):
     rundate = fields.Datetime(string=u'最近一次执行日期')
     run_sql = fields.Text(string=u'运行脚本')
     isRunScript = fields.Boolean(string=u'是否由脚本运行')
-    internal_method = fields.Selection([('ByAmount', 'amt'), ('ByQty', 'qty'), ('ByPhone', 'phone'), ('ByAge', 'age'),('ByPeriod', 'period')],
-                                       string=u'内部类型')
+    internal_method = fields.Selection(
+        [('ByAmount', 'amt'), ('ByQty', 'qty'), ('ByPhone', 'phone'), ('ByAge', 'age'), ('ByPeriod', 'period'),
+         ('ByCompany', 'Company')],
+        string=u'内部类型')
     run_method = fields.Text(string=u'运行程序')
     memo = fields.Text(string=u'备注说明')
-
 
     def get_tags_member_count(self):
         sql = """

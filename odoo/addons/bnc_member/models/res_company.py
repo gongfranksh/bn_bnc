@@ -9,7 +9,9 @@ class res_company(models.Model):
     _inherit = 'res.company'
     bncode=fields.Char(string='bncode' )
     buid=fields.Many2one('bnc.business',string=u'事业部' )
-    
+    mp_bucode=fields.Char(string=u'微信公众号code' )
+    mp_buname=fields.Char(string=u'微信公众号名称' )
+
 
 
 

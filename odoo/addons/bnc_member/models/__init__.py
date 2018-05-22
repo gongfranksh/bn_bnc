@@ -12,4 +12,5 @@ import bnc_2dfire
 import bnc_computer_repaire
 import bn_eservice_tools
 import bnc_tags
+import bnc_mobile_bu
 

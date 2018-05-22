@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+        <record id="bnc_member_res_company" model="ir.ui.view">
+            <field name="name">res.company.form.bncmember.inherit</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//notebook" position="inside">
+                        <page name="mp_bu" string="微信公众号以及店代码维护">
+                            <group>
+                                <field name="bncode"/>
+                                <field name="buid"/>
+                                <field name="mp_bucode"/>
+                                <field name="mp_buname"/>
+                            </group>
+                        </page>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
