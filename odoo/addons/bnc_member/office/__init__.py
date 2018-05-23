@@ -1,1 +1,2 @@
 import bnc_report_pptx
+import bnc_report_word

@@ -15,7 +15,10 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
-from odoo.addons.bnc_member.office.bnc_report_pptx import bnc_report_ppt
+# from odoo.addons.bnc_member.office.bnc_report_pptx import bnc_report_ppt
+from odoo.addons.bnc_member.office.bnc_report_pptx import *
+from odoo.addons.bnc_member.office.bnc_report_word import *
+
 _logger = logging.getLogger(__name__)
 
 k = 3  # 聚类的类别
@@ -92,6 +95,7 @@ class bnc_mining_kmeans(models.Model):
                     from pos_order  po
                  inner join pos_order_line pl  on po.id=pl.order_id
                 where  date_order between '{0}' and '{1}'  and partner_id is not null
+                and partner_id not in (4846)
                 group by partner_id ) c
         """
         sql = sql.format(para_start, para_end)
@@ -106,9 +110,13 @@ class bnc_mining_kmeans(models.Model):
 
     def density_plot(self):  # 自定义作图函数
         #    print data
-        t=bnc_report_ppt()
-        getdata=self._query_report_result()
-        ppt=t.create_ppt(getdata)
+        t = bnc_report_ppt()
+        getdata = self._query_report_result()
+        category_volumns = self._query_report_result()
+
+        mapped_data = dict([(volmns[0], volmns[1]) for volmns in category_volumns])
+
+        ppt = t.create_ppt(getdata)
 
         ref = {
             'filename': u'%s-%s.pptx' % (self.code, self.name),
@@ -117,7 +125,7 @@ class bnc_mining_kmeans(models.Model):
             'datas': ppt,
         }
         self.add_attachment(ref)
-
+        report_files = []
         for i in range(k):
             para_data = self._get_result(i)
             data = pd.DataFrame(data=para_data, columns=['partner', 'R', 'F', 'M'])
@@ -132,20 +140,45 @@ class bnc_mining_kmeans(models.Model):
 
             try:
                 self.density_plot_draw(data).savefig(file_path)
-                #            if os.access(filename, os.R_OK):
                 with open(file_path, 'rb') as fp:
                     data = fp.read().encode('base64')
                     print sys.path[0]
-                    ref={
-                        'filename':filename,
-                        'res_model':'bnc.mining.kmeans',
-                        'res_id':self.id,
-                        'datas':data,
-                        }
-                    self.add_attachment(ref)
- #                   self.add_attachment(ref）
+                    ref = {
+                        'filename': filename,
+                        'res_model': 'bnc.mining.kmeans',
+                        'res_id': self.id,
+                        'datas': data,
+                    }
+
+                    item_file = {
+                        'filename': filename,
+                        'name': u'%s-%s-%s类' % (self.code, self.name, i),
+                        'volumns': mapped_data.get(i, 0),
+                        'category': i,
+                    }
+                    report_files.append(item_file)
+                    # self.add_attachment(ref)
             except Exception:
                 continue
+
+        w1 = bnc_report_word()
+
+        # for member in self:
+        #     member.pos_order_count = mapped_data.get(member.resid.id, 0)
+
+        para_data = {
+            'title': u'%s-%s' % (self.code, self.name),
+            'files': report_files,
+        }
+        word = w1.create_word(para_data)
+
+        ref = {
+            'filename': u'%s-%s.docx' % (self.code, self.name),
+            'res_model': 'bnc.mining.kmeans',
+            'res_id': self.id,
+            'datas': word,
+        }
+        self.add_attachment(ref)
 
         return True
 
@@ -190,18 +223,17 @@ class bnc_mining_kmeans(models.Model):
         return vals
 
     def _query_report_result(self):
-        sql="""
+        sql = """
                 select col_c,count(*) as number  
                 from bnc_mining_kmeans_result 
                 where kmeansids={0}
                 group by col_c
         """
-        sql=sql.format(self.id)
+        sql = sql.format(self.id)
         cr = self._cr
         cr.execute(sql)
-        res=cr.fetchall()
+        res = cr.fetchall()
         return res
-
 
 
 class bnc_mining_kmeans_result(models.Model):
