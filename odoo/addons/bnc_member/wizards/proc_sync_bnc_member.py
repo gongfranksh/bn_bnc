@@ -161,6 +161,7 @@ class proc_sync_bnc_member(models.TransientModel):
             else:
                 bnc_company_id = None
 
+            seek_mobile= self.env['bnc.mobile.bu'].search([('strPhone', '=', mobile)])
             val = {
                 'strPhone': mobile,
                 'RegDate': reg,
@@ -172,7 +173,12 @@ class proc_sync_bnc_member(models.TransientModel):
                 'belong_bnc_member': bnc_member_id,
                 'belong_company': bnc_company_id,
             }
-            self.env['bnc.mobile.bu'].create(val)
+
+            if seek_mobile:
+                seek_mobile.write(val)
+            else :
+                self.env['bnc.mobile.bu'].create(val)
+
         return True
 
     def get_personal_recordset(self, ms):
