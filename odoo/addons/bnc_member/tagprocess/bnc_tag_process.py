@@ -164,19 +164,17 @@ class bnc_tag_process(models.TransientModel):
             rmf_entity = self.env['bnc.tags.rmf.template'].search([('id', '=', rmf)])
             if rmf_entity:
                 partner_list = rmf_entity.get_rfm_tags_recordset()
-
-                for partner in partner_list:
-                    partner_id = int(partner[0])
-                    rfm_flag = partner[4]
-                    member = self.env['bnc.member'].search([('resid', '=', partner_id)])
-                    tag = self.env['bnc.tags'].search([('rmf_template_ids', '=', rmf), ('rmf_flag', '=', rfm_flag)])
-                    tags = []
-                    tags.append((4, tag.id))
+                try:
+                    for partner in partner_list:
+                        partner_id = int(partner[0])
+                        rfm_flag = partner[4]
+                        member = self.env['bnc.member'].search([('resid', '=', partner_id)])
+                        tag = self.env['bnc.tags'].search([('rmf_template_ids', '=', rmf), ('rmf_flag', '=', rfm_flag)])
+                        tags = []
+                        tags.append((4, tag.id))
                     member.write({'tagsid': tags})
-
-
-
-
+                except Exception:
+                    continue
 
     def process_for_all(self):
         _logger.info("process_for_all")
