@@ -60,7 +60,7 @@ class bnc_tag_process(models.TransientModel):
         tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByAge'), ('isActive', '=', True)])
         cr = self._cr
         for tag in tag_list:
-            # 删除原来的标签
+            #TODO 删除原来的标签
             exec_sql = """
                delete from bnc_tags_member_rel where tagid ={0}
             """
@@ -87,7 +87,7 @@ class bnc_tag_process(models.TransientModel):
         tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByPeriod'), ('isActive', '=', True)])
         cr = self._cr
         for tag in tag_list:
-            # 删除原来的标签
+            #TODO 删除原来的标签
             exec_sql = """
                delete from bnc_tags_member_rel where tagid ={0}
             """
@@ -114,7 +114,7 @@ class bnc_tag_process(models.TransientModel):
         tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByCompany'), ('isActive', '=', True)])
         cr = self._cr
         for tag in tag_list:
-            # 删除原来的标签
+            #TODO 删除原来的标签
             exec_sql = """
                delete from bnc_tags_member_rel where tagid ={0}
             """
