@@ -82,8 +82,6 @@ class bnc_tag_process(models.TransientModel):
                 except Exception:
                     continue
 
-
-
     def process_for_period(self):
         _logger.info("process_for_period")
         tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByPeriod'), ('isActive', '=', True)])
@@ -138,6 +136,47 @@ class bnc_tag_process(models.TransientModel):
                 except Exception:
                     continue
 
+    def process_for_RFM(self):
+        _logger.info("process_for_RFM")
+        tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByRMF'), ('isActive', '=', True)])
+
+        cr = self._cr
+
+        # TODO 取出RFM模板
+
+        exec_sql = """
+           select distinct rmf_template_ids from bnc_tags where id in {0}
+        """
+        exec_sql = exec_sql.format(tuple(tag_list.ids))
+        cr.execute(exec_sql)
+        rmf_template_ids = cr.fetchall()
+
+        # TODO 删除原来的标签
+
+        exec_sql = """
+           delete from bnc_tags_member_rel where tagid  in {0}
+        """
+        exec_sql = exec_sql.format(tuple(tag_list.ids))
+        cr.execute(exec_sql)
+
+        # TODO 处理标签模板
+        for rmf in rmf_template_ids:
+            rmf_entity = self.env['bnc.tags.rmf.template'].search([('id', '=', rmf)])
+            if rmf_entity:
+                partner_list = rmf_entity.get_rfm_tags_recordset()
+
+                for partner in partner_list:
+                    partner_id = int(partner[0])
+                    rfm_flag = partner[4]
+                    member = self.env['bnc.member'].search([('resid', '=', partner_id)])
+                    tag = self.env['bnc.tags'].search([('rmf_template_ids', '=', rmf), ('rmf_flag', '=', rfm_flag)])
+                    tags = []
+                    tags.append((4, tag.id))
+                    member.write({'tagsid': tags})
+
+
+
+
 
     def process_for_all(self):
         _logger.info("process_for_all")
@@ -145,5 +184,4 @@ class bnc_tag_process(models.TransientModel):
         self.env['bnc.tag.process'].process_for_age()
         self.env['bnc.tag.process'].process_for_period()
         self.env['bnc.tag.process'].process_for_company()
-
-
+        self.env['bnc.tag.process'].process_for_RFM()

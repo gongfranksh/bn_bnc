@@ -1,0 +1,66 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+        <record model="ir.ui.view" id="bnc_member.view_bnc_tags_rmf_template_tree">
+            <field name="name">RFM模板设置</field>
+            <field name="model">bnc.tags.rmf.template</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="internal_method"/>
+                    <field name="isActive"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="bnc_member.view_bnc_tags_rmf_template_form">
+            <field name="name">RFM模板设置</field>
+            <field name="model">bnc.tags.rmf.template</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+<!--
+                        <button name="create_rfm_tags" string="产生标签" states="draft" type="object" class="btn-primary"
+                                attrs="{'invisible': [('state', '=', 'done')]}"/>
+-->
+                        <button name="create_rfm_tags" string="产生标签" type="object" class="btn-primary"
+                                />
+
+                    </header>
+                    <sheet>
+                        <group col="4">
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="internal_method"/>
+                            <field name="isActive"/>
+                        </group>
+
+                        <group col="4">
+                            <field name="col_r"/>
+                            <field name="col_f"/>
+                            <field name="col_m"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <!-- actions opening views on models -->
+
+        <record model="ir.actions.act_window" id="bnc_member.action_bnc_tags_rmf_template">
+            <field name="name">RFM模板设置</field>
+            <field name="res_model">bnc.tags.rmf.template</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!-- actions -->
+        <menuitem name="RFM模板设置" id="bnc_member.bnc_tags_rmf_template_menu" parent="bnc_member.bnc_tags_sub_menu"
+                  action="bnc_member.action_bnc_tags_rmf_template"/>
+
+
+    </data>
+</odoo>

@@ -30,6 +30,7 @@
         'views/bnc_member_view.xml',
         'views/bnc_tags_process.xml',
         'views/bnc_tags_template.xml',
+        'views/bnc_tags_rmf_template.xml',
         'views/bnc_lead_dashbord.xml',
         'views/bnc_lead_view.xml',
         'views/bnc_lead_assign.xml',

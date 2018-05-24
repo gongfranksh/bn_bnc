@@ -11,6 +11,7 @@ class bnc_tags(models.Model):
     name = fields.Char(string=u'名称')
     color = fields.Integer(string="Color", help="Choose your color")
     cateids = fields.Many2one('bnc.tags.category', string=u'所属分类')
+    rmf_template_ids = fields.Many2one('bnc.tags.rmf.template', string=u'RFM模板')
     isActive = fields.Boolean(string=u'有效标记')
     activeDate = fields.Datetime(string=u'生效日期')
     rundate = fields.Datetime(string=u'最近一次执行日期')
@@ -18,9 +19,10 @@ class bnc_tags(models.Model):
     isRunScript = fields.Boolean(string=u'是否由脚本运行')
     internal_method = fields.Selection(
         [('ByAmount', 'amt'), ('ByQty', 'qty'), ('ByPhone', 'phone'), ('ByAge', 'age'), ('ByPeriod', 'period'),
-         ('ByCompany', 'Company')],
+         ('ByCompany', 'Company'),('ByRMF', 'RMF')],
         string=u'内部类型')
     run_method = fields.Text(string=u'运行程序')
+    rmf_flag = fields.Char(string=u'RMF标记')
     memo = fields.Text(string=u'备注说明')
 
     def get_tags_member_count(self):
