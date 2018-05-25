@@ -161,7 +161,7 @@ class bnc_tag_process(models.TransientModel):
 
         # TODO 处理标签模板
         for rmf in rmf_template_ids:
-            rmf_entity = self.env['bnc.tags.rmf.template'].search([('id', '=', rmf)])
+            rmf_entity = self.env['bnc.tags.rmf.template'].search([('id', '=', rmf[0])])
             if rmf_entity:
                 partner_list = rmf_entity.get_rfm_tags_recordset()
                 try:
@@ -169,10 +169,10 @@ class bnc_tag_process(models.TransientModel):
                         partner_id = int(partner[0])
                         rfm_flag = partner[4]
                         member = self.env['bnc.member'].search([('resid', '=', partner_id)])
-                        tag = self.env['bnc.tags'].search([('rmf_template_ids', '=', rmf), ('rmf_flag', '=', rfm_flag)])
+                        tag = self.env['bnc.tags'].search([('rmf_template_ids', 'in', rmf), ('rmf_flag', '=', rfm_flag)])
                         tags = []
                         tags.append((4, tag.id))
-                    member.write({'tagsid': tags})
+                        member.write({'tagsid': tags})
                 except Exception:
                     continue
 
