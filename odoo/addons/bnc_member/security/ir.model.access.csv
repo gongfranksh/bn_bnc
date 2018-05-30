@@ -1,2 +1,10 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_bnc_member_bnc_member,bnc_member.bnc_member,model_bnc_member_bnc_member,,1,0,0,0
+bnc_bnc_member_r,bnc_member_readonly,model_bnc_member,group_bnc_readonly,1,0,0,0
+model_bnc_business_r,model_bnc_business_r,model_bnc_business,group_bnc_readonly,1,0,0,0
+model_bnc_tags_r,model_bnc_tags_r,model_bnc_tags,group_bnc_readonly,1,0,0,0
+model_bnc_tags_category_r,model_bnc_tags_category_r,model_bnc_tags_category,group_bnc_readonly,1,0,0,0
+model_bnc_tags_log_r,model_bnc_tags_log_r,model_bnc_tags_log,group_bnc_readonly,1,0,0,0
+model_res_partner_r,model_res_partner_r,model_res_partner,group_bnc_readonly,1,0,0,0
+model_res_company_r,model_res_company_r,model_res_company,group_bnc_readonly,1,0,0,0
+model_pos_order_r,model_pos_order_r,model_pos_order,group_bnc_readonly,1,0,0,0
+model_pos_order_line_r,model_pos_order_line_r,model_pos_order_line,group_bnc_readonly,1,0,0,0
