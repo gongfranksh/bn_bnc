@@ -52,6 +52,15 @@
                             <field name="phone_os"/>
                             <field name="age_period"/>
                         </group>
+                        <group col="4">
+                            <field name="num_1"/>
+                            <field name="num_2"/>
+                            <field name="num_3"/>
+                            <field name="num_4"/>
+                            <field name="num_5"/>
+                            <field name="num_6"/>
+                            <field name="num_7"/>
+                        </group>
                         <group col="2">
                             <field name="pos_order_count"/>
                             <field name="tagsid" widget="many2many_tags"/>
@@ -98,6 +107,8 @@
                     <field name="strBncCardid"/>
                     <field name="nickname"/>
                     <field name="pos_order_count"/>
+
+
                     <field name="tagsid"/>
                     <field name="tags_name"/>
 
@@ -150,7 +161,7 @@
 
                                     <div class="oe_kanban_footer">
                                         <xpath>
-                                            <span  t-if="record.tags_name.value!=''" class="badge">
+                                            <span t-if="record.tags_name.value!=''" class="badge">
                                                 <t t-esc="record.tags_name.value"/>
                                             </span>
                                         </xpath>

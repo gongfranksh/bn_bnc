@@ -15,6 +15,7 @@
                         <button name="process_for_period" string="交易周期处理" type="object" class="btn-primary"/>
                         <button name="process_for_company" string="注册来源处理" type="object" class="btn-primary"/>
                         <button name="process_for_RFM" string="RFM处理" type="object" class="btn-primary"/>
+                        <button name="process_for_phone_number" string="手机号码归属处理" type="object" class="btn-primary"/>
                         <button name="process_for_all" string="全部处理" type="object" class="btn-primary"/>
                     </footer>
                 </form>

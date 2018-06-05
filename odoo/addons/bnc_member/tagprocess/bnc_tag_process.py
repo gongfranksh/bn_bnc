@@ -5,6 +5,7 @@ import datetime
 
 from odoo import api, models, tools, registry
 from odoo.addons.bnc_member.wizards.BNmssql import bn_SQLCa
+from bnc_get_phone_number_info import *
 
 _logger = logging.getLogger(__name__)
 
@@ -60,7 +61,7 @@ class bnc_tag_process(models.TransientModel):
         tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByAge'), ('isActive', '=', True)])
         cr = self._cr
         for tag in tag_list:
-            #TODO 删除原来的标签
+            # TODO 删除原来的标签
             exec_sql = """
                delete from bnc_tags_member_rel where tagid ={0}
             """
@@ -82,12 +83,47 @@ class bnc_tag_process(models.TransientModel):
                 except Exception:
                     continue
 
+    def process_for_phone_number(self):
+        _logger.info(" process_for_phone_number")
+        # TODO 查找未处理会员记录
+        member_list = self.env['bnc.member'].search([('num_1', '=', None)])
+
+        # proc_member_list = []
+        # cnt = 0
+        # for mem in member_list:
+        #     cnt += 1
+        #     proc_member_list.append(mem)
+        #     if cnt == 5000:
+        #         break
+
+        for mem in member_list:
+            try:
+                info = bnc_getProvider(mem['strPhone'])
+
+                if info:
+                    phone_number_info = {
+                        'num_1': info[0],
+                        'num_2': info[1],
+                        'num_3': info[2],
+                        'num_4': info[3],
+                        'num_5': info[4],
+                        'num_6': info[5],
+                        'num_7': info[6],
+                    }
+                else:
+                    phone_number_info = {
+                        'num_1': 'error'}
+
+                mem.write(phone_number_info)
+            except Exception:
+                continue
+
     def process_for_period(self):
         _logger.info("process_for_period")
         tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByPeriod'), ('isActive', '=', True)])
         cr = self._cr
         for tag in tag_list:
-            #TODO 删除原来的标签
+            # TODO 删除原来的标签
             exec_sql = """
                delete from bnc_tags_member_rel where tagid ={0}
             """
@@ -114,7 +150,7 @@ class bnc_tag_process(models.TransientModel):
         tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByCompany'), ('isActive', '=', True)])
         cr = self._cr
         for tag in tag_list:
-            #TODO 删除原来的标签
+            # TODO 删除原来的标签
             exec_sql = """
                delete from bnc_tags_member_rel where tagid ={0}
             """
@@ -169,7 +205,8 @@ class bnc_tag_process(models.TransientModel):
                         partner_id = int(partner[0])
                         rfm_flag = partner[4]
                         member = self.env['bnc.member'].search([('resid', '=', partner_id)])
-                        tag = self.env['bnc.tags'].search([('rmf_template_ids', 'in', rmf), ('rmf_flag', '=', rfm_flag)])
+                        tag = self.env['bnc.tags'].search(
+                            [('rmf_template_ids', 'in', rmf), ('rmf_flag', '=', rfm_flag)])
                         tags = []
                         tags.append((4, tag.id))
                         member.write({'tagsid': tags})
@@ -183,3 +220,4 @@ class bnc_tag_process(models.TransientModel):
         self.env['bnc.tag.process'].process_for_period()
         self.env['bnc.tag.process'].process_for_company()
         self.env['bnc.tag.process'].process_for_RFM()
+        # self.env['bnc.tag.process'].process_for_phone_number()

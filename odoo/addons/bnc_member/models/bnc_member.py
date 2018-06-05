@@ -58,6 +58,16 @@ class bnc_member(models.Model):
 	phone_os=fields.Char(string=u'手机操作系统' )
 	phone_brand=fields.Char(string=u'手机品牌' )
 	phone_status=fields.Boolean(string=u'手机信息更新状态', default=False )
+
+	num_1=fields.Char(string=u'归属地' )
+	num_2=fields.Char(string=u'卡类型' )
+	num_3=fields.Char(string=u'运营商' )
+	num_4=fields.Char(string=u'区号' )
+	num_5=fields.Char(string=u'邮编' )
+	num_6=fields.Char(string=u'省份' )
+	num_7=fields.Char(string=u'城市' )
+
+
 	age_period =fields.Integer(compute='_compute_age',string=u'年龄段')
 
 	pos_order_count = fields.Integer(
