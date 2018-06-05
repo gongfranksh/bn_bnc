@@ -5,7 +5,7 @@ import re
 
 def getPageCode(url):
     try:
-        file = urlopen(url,data=None, timeout=3)
+        file = urlopen(url,data=None, timeout=5)
         text = file.read()
         file.close()
     except:
@@ -42,4 +42,31 @@ def bnc_getProvider(phoneNum):
     else:
         item =None
     # result.append((phoneNum, item))
+    return item
+
+
+
+def bnc_getProvider_ip386(phoneNum):
+    # url = "http://www.ip138.com:8080/search.asp?mobile=%s&action=mobile" % phoneNum
+    url = "http://shouji.xpcha.com/%s.html" % phoneNum
+    text = getPageCode(url)
+    if text :
+      item = parseString_ip386(text)
+    else:
+        item =None
+    # result.append((phoneNum, item))
+    return item
+
+def parseString_ip386(src):
+    pat = []
+    pat.append('<dd><span>号码归属地：</span>(.*?)(?=</dd>)')
+    pat.append('<dd><span>手机卡类型：</span>(.*?)(?=</dd>)')
+    pat.append('<dd><span>归属地区号：</span>(.*?)(?=</dd>)')
+    pat.append('<dd><span>归属地邮编：</span>(.*?)(?=</dd>)')
+
+    item = []
+    for i in range(len(pat)):
+        m = re.search(pat[i], src)
+        v = m.group(1)
+        item.append(v)
     return item
