@@ -184,7 +184,7 @@ def insert_pos_data_daily(self,procdate,business):
                 inter_pcode= pl['menuId']
                 res.append((0,0,{
                     'product_id':self.env['product.product'].search([('default_code', '=',inter_pcode)]).id,
-                    'price_unit':pl['fee'],
+                    'price_unit':pl['price'],
                     'qty':pl['num'], 
                     }))
                 

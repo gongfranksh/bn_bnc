@@ -286,6 +286,7 @@ class proc_sync_jsport(models.TransientModel):
         return True
 
     def delete_duplicate_record_jspot(self):
+        #TODO 删除涉及不能销售的产品的明细交易记录
         exec_sql = """ 
                 delete  from pos_order_line where product_id in (
                 select id from product_product 
@@ -295,6 +296,31 @@ class proc_sync_jsport(models.TransientModel):
                 """
         cr = self._cr
         cr.execute(exec_sql)
+
+        #TODO 删除没有明细交易的 主记录
+        exec_sql = """
+                    delete from pos_order
+                    where   id in (
+                        select id
+                        from (
+                            select po.id, pol.cnt
+                            from pos_order po
+                            left join
+                            (
+                                select order_id, count( *) as cnt
+                                from pos_order_line
+                                group by order_id
+                                ) pol
+                            on po.id = pol.order_id
+                            ) a
+                        where
+                        cnt is null
+                    )
+                """
+        cr.execute(exec_sql)
+
+
+
         return True
 
     def proc_sync_buynow_all(self):
