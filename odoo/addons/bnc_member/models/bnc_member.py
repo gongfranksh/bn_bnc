@@ -76,6 +76,7 @@ class bnc_member(models.Model):
 		help="The number of point of sale orders related to this customer",
 	)
 
+	total_amount = fields.Float(compute='_compute_total_amount', string='交易金额')
 
 	tags_name = fields.Char(
 		compute='_compute_tags_name',
@@ -112,6 +113,12 @@ class bnc_member(models.Model):
 		for member in self:
 			member.pos_order_count = mapped_data.get(member.resid.id, 0)
 
+
+	@api.depends('resid')
+	def _compute_total_amount(self):
+		for record in self:
+			record.total_amount = sum(
+				line.amount_total for line in record.env['pos.order'].search([('partner_id', '=', record.resid.id)]))
 
 	@api.depends('tagsid')
 	def _compute_tags_name(self):

@@ -9,6 +9,7 @@
                     <field string="百乐卡编号" name="resid"/>
                     <field name="strPhone" password="True"/>
                     <field name="pos_order_count"/>
+                    <field name="total_amount"/>
                     <field name="tagsid" widget="many2many_tags"/>
 
 
