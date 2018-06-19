@@ -112,6 +112,33 @@ class proc_sync_bnc_member(models.TransientModel):
                 self.env['bnc.member'].create(res)
         return True
 
+    def proc_volumn_and_amount(self):
+        _logger.info("proc_volumn_and_amount")
+        exec_sql = """
+    				select
+    				  po.partner_id,
+    				  count(distinct order_id) as volumn,
+    				  sum(pol.price_unit * pol.qty) as total_amt
+    				from pos_order po inner join pos_order_line pol on po.id = pol.order_id
+    				where po.partner_id is not null
+    				group by po.partner_id
+    				order by po.partner_id		
+    	"""
+        cr = self._cr
+        cr.execute(exec_sql)
+        partner_list = cr.fetchall()
+        for (partner_tmp, volumns, amount) in partner_list:
+            mem_id=self.env['bnc.member'].search([('resid','=',partner_tmp)])
+            vals={
+                'pos_order_count':volumns,
+                'total_amount':amount,
+            }
+
+            if mem_id:
+                mem_id.write(vals)
+
+
+
     def sync_member_personal_information(self):
         # TODO  'sync_member_personal_information'
         db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
@@ -264,4 +291,5 @@ class proc_sync_bnc_member(models.TransientModel):
         self.env['proc.sync.bnc.member'].identify_personal()
         self.env['proc.sync.bnc.member'].sync_member_personal_information()
         self.env['proc.sync.bnc.member'].sync_member_personal_mp_weixin()
+
         return {'type': 'ir.actions.act_window_close'}

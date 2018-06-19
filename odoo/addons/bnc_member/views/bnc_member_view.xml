@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data >
         <record model="ir.ui.view" id="bnc_member.bnc_memeber_list">
             <field name="name">百乐卡清册</field>
             <field name="model">bnc.member</field>

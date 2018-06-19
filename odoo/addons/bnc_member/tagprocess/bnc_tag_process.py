@@ -258,9 +258,11 @@ class bnc_tag_process(models.TransientModel):
 
     def process_for_all(self):
         _logger.info("process_for_all")
+        self.env['proc.sync.bnc.member'].proc_volumn_and_amount()
         self.env['bnc.tag.process'].seek_for_employee()
         self.env['bnc.tag.process'].process_for_age()
         self.env['bnc.tag.process'].process_for_period()
         self.env['bnc.tag.process'].process_for_company()
         self.env['bnc.tag.process'].process_for_RFM()
         self.env['bnc.tag.process'].process_for_phone_number_all()
+

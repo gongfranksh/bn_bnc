@@ -71,12 +71,16 @@ class bnc_member(models.Model):
 	age_period =fields.Integer(compute='_compute_age',string=u'年龄段')
 
 	pos_order_count = fields.Integer(
-		compute='_compute_pos_order',
+#		compute='_compute_pos_order',
 		string=u'交易数',
+#		store=True,
 		help="The number of point of sale orders related to this customer",
 	)
 
-	total_amount = fields.Float(compute='_compute_total_amount', string='交易金额')
+	total_amount = fields.Float(
+#		compute='_compute_total_amount',
+#		store=True,
+		string='交易金额')
 
 	tags_name = fields.Char(
 		compute='_compute_tags_name',
@@ -101,7 +105,7 @@ class bnc_member(models.Model):
             d2= datetime.date.today()
             self.age_period=d2.year-d1.year
 
-	@api.depends('resid')
+	@api.depends('resid','resid.pos_order_count')
 	def _compute_pos_order(self):
 		res=[]
 		for mem in self:
@@ -114,7 +118,7 @@ class bnc_member(models.Model):
 			member.pos_order_count = mapped_data.get(member.resid.id, 0)
 
 
-	@api.depends('resid')
+	@api.depends('resid','resid.pos_order_count')
 	def _compute_total_amount(self):
 		for record in self:
 			record.total_amount = sum(
@@ -142,6 +146,10 @@ class bnc_member(models.Model):
 		for member in self:
 			print member.id
 			member.tags_name = mapped_data.get(member.id, 0)
+
+
+
+
 
 
 

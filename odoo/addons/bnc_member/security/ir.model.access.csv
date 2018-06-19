@@ -8,4 +8,3 @@ model_res_partner_r,model_res_partner_r,model_res_partner,group_bnc_readonly,1,0
 model_res_company_r,model_res_company_r,model_res_company,group_bnc_readonly,1,0,0,0
 model_pos_order_r,model_pos_order_r,model_pos_order,group_bnc_readonly,1,0,0,0
 model_pos_order_line_r,model_pos_order_line_r,model_pos_order_line,group_bnc_readonly,1,0,0,0
-model_account_bank_statement_line_r,model_account_bank_statement_line_r,model_account_bank_statement_line,group_bnc_readonly,1,0,0,0
