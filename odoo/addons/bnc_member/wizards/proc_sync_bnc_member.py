@@ -208,6 +208,48 @@ class proc_sync_bnc_member(models.TransientModel):
 
         return True
 
+    def sync_member_personal_integral_weixin(self):
+        # TODO  'sync_member_personal_integral_weixin'
+        db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
+        mem_list = self.get_personal_integral_weixin(Bnc_Mysql_SQLCa(db[0]))
+        for (ieid,mobile,name,teg_id,teg_name,type_name,integral,discount,validity_type,
+             up_begin,up_end,addtime,vali_begin,vali_end,serial,statu,endtime,stamp
+             ) in mem_list:
+            member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
+            if member:
+                bnc_member_id = member.id
+            else:
+                bnc_member_id = None
+            val = {
+                'intIeId': ieid,
+                'strPhone': mobile,
+                'strName': name,
+                'intTegId': teg_id,
+                'strTegName': teg_name,
+                'strTypeName': type_name,
+                'intIntegral': integral,
+                'intDiscount': discount,
+                'intValidityType': validity_type,
+                'up_begin': up_begin,
+                'up_end': up_end,
+                'valid_begin': vali_begin,
+                'valid_end': vali_end,
+                'strSerial': serial,
+                'strStatus': statu,
+                'Addtime': addtime,
+                'Endtime ': endtime,
+                'timestamp': stamp,
+                'belong_bnc_member': bnc_member_id,
+            }
+            mem_c = self.env['bnc.mobile.integral'].search([('intIeId', '=', ieid)])
+            if mem_c:
+                mem_c.write(val)
+            else :
+                self.env['bnc.mobile.integral'].create(val)
+        return True
+
+
+
     def get_personal_recordset(self, ms):
         # 获取更新记录范围，本地库的时间戳和服务端时间戳
         query_local = " select max(mysqlstamp) as maxnum from bnc_member"
@@ -245,6 +287,28 @@ class proc_sync_bnc_member(models.TransientModel):
                 where unix_timestamp(reg)>{0}
                 order by unix_timestamp(reg) 
                   """
+        sql = sql.format(start_stamp)
+        res = ms.ExecQuery(sql.encode('utf-8'))
+        return res
+
+    def get_personal_integral_weixin(self, ms):
+        # 获取更新记录范围，本地库的时间戳和服务端时间戳
+        query_local = " select max(timestamp) as maxnum from bnc_mobile_integral"
+        cr = self._cr
+        cr.execute(query_local)
+        for local_max_num in cr.fetchall():
+            start_stamp = local_max_num[0]
+            if local_max_num[0] is None:
+                start_stamp = 0
+        sql = """
+                select ieid,mobile,name,teg_id,teg_name,type_name,integral,discount,
+                        validity_type,up_begin,up_end,
+                        addtime,vali_begin,vali_end,serial,statu,
+                        endtime,unix_timestamp(updatetime)
+                from v_integral
+                 where unix_timestamp(updatetime)>{0}
+                 order by unix_timestamp(updatetime)
+                   """
         sql = sql.format(start_stamp)
         res = ms.ExecQuery(sql.encode('utf-8'))
         return res
