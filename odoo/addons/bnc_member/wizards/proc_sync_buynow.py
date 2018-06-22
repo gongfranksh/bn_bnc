@@ -336,7 +336,7 @@ class proc_sync_jsport(models.TransientModel):
     def check_pos_data_daily(self, ms, store_code, para_interval):
         vals = []
         end_date = datetime.datetime.now()
-        for i in range(1, para_interval + 1):
+        for i in range(0, para_interval + 1):
             servercnt = 0
             localcnt = 0
             day = end_date - datetime.timedelta(days=i)
@@ -391,7 +391,7 @@ class proc_sync_jsport(models.TransientModel):
                 'list_price': normalprice,
                 'price': normalprice,
                 'bn_barcode': tmp_code,
-                'sale_ok': True,
+#                'sale_ok': True,
                 'default_code': tmp_code,
                 'categ_id': self.env['product.category'].search_bycode(store_code + '-' + classid).id,
                 'b_category': self.env['product.category'].search_bycode(store_code + '-' + classid[0:4]).id,
@@ -404,10 +404,12 @@ class proc_sync_jsport(models.TransientModel):
             # 检查是插入还是更新
             r01 = self.env['product.template'].search_bycode(tmp_code)
             if r01:
+
                 r01.write(res)
             #                print 'update'
             #                print res
             else:
+                res['sale_ok']= True
                 self.env['product.template'].create(res)
         #                print 'create'
         #                print res

@@ -13,10 +13,13 @@ from odoo.addons.bnc_member.models.bnc_2dfire import *
 
 _logger = logging.getLogger(__name__)
 
+begin_day = 7
+end_day = 0
+
 class proc_sync_2dfire(models.TransientModel):
     _name = 'proc.sync.2dfire'
     _description = 'proc.sync.2dfire'
-    
+
     #获取事业部代码
     @api.model    
     def _get_business(self):
@@ -29,8 +32,8 @@ class proc_sync_2dfire(models.TransientModel):
         
         print 'sync_2dfire_sales'
         period ={
-            'begin':datetime.datetime.now()- datetime.timedelta(days=7),
-            'end':datetime.datetime.now()-datetime.timedelta(days=1),            
+            'begin':datetime.datetime.now()- datetime.timedelta(days=begin_day),
+            'end':datetime.datetime.now()-datetime.timedelta(days=end_day),
             }
         
         
@@ -48,8 +51,8 @@ class proc_sync_2dfire(models.TransientModel):
     def sync_2dfire_product(self):
         print 'sync_2dfire_product'
         period ={
-            'begin':datetime.datetime.now()- datetime.timedelta(days=10),
-            'end':datetime.datetime.now()-datetime.timedelta(days=1),            
+            'begin':datetime.datetime.now()- datetime.timedelta(days=begin_day),
+            'end':datetime.datetime.now()-datetime.timedelta(days=end_day),
             }
         
         

@@ -13,8 +13,9 @@ from odoo.addons.bnc_member.models.bnc_computer_repaire import *
 
 _logger = logging.getLogger(__name__)
 
-TOTAL_DAY=10
 
+begin_day = 7
+end_day = 0
 class proc_sync_eservices(models.TransientModel):
     _name = 'proc.sync.eservices'
     _description = 'proc.sync.eservices'
@@ -31,8 +32,8 @@ class proc_sync_eservices(models.TransientModel):
         
         print 'sync_eservices_sales'
         period ={
-            'begin':datetime.datetime.now()- datetime.timedelta(days=TOTAL_DAY),
-            'end':datetime.datetime.now()-datetime.timedelta(days=1),            
+            'begin':datetime.datetime.now()- datetime.timedelta(days=begin_day),
+            'end':datetime.datetime.now()-datetime.timedelta(days=end_day),
             }
         sync_sales_to_bnc(self,period)
         
@@ -50,8 +51,8 @@ class proc_sync_eservices(models.TransientModel):
     def sync_eservices_product(self):
         print 'sync_eservices_product'
         period ={
-            'begin':datetime.datetime.now()- datetime.timedelta(days=10),
-            'end':datetime.datetime.now()-datetime.timedelta(days=1),            
+            'begin':datetime.datetime.now()- datetime.timedelta(days=begin_day),
+            'end':datetime.datetime.now()-datetime.timedelta(days=end_day),
             }
         
         

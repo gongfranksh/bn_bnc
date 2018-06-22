@@ -443,7 +443,7 @@ class proc_sync_jsport(models.TransientModel):
     def check_pos_data_daily(self, para_interval):
         vals = []
         end_date = datetime.datetime.now()
-        for i in range(1, para_interval + 1):
+        for i in range(0, para_interval + 1):
             servercnt = 0
             localcnt = 0
             day = end_date - datetime.timedelta(days=i)
