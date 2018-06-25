@@ -96,9 +96,10 @@ class proc_sync_bnc_member(models.TransientModel):
                 'OpenDate': opendate,
                 'RegDate': regdate,
                 'lngvipgrade': lngvipgrade,
+                'vip_level_name_by_vipgrade': lngvipgrade,
                 'dvipDate': dvipdate,
                 'timestamp': timestamp,
-                'strSex': strsex,
+#                'strSex': strsex,
                 'ishandset': ishandset,
                 #                        'resid':self.env['res.partner'].write(vals),
             }
@@ -168,6 +169,43 @@ class proc_sync_bnc_member(models.TransientModel):
                 }
                 member.write(val)
         return True
+
+    def sync_member_personal_information_for_null(self):
+        # TODO  'sync_member_personal_information_for_null'
+
+        Need_to_update_list = self.env['bnc.member'].search([('mysqlstamp', '=', None)])
+
+        db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
+
+        mem_list = self.get_personal_recordset_for_null(Bnc_Mysql_SQLCa(db[0]),Need_to_update_list)
+
+        if mem_list :
+            for (mobile, bu_name, wxid, unionid, openid, nickname, sex,
+                 birthday, email, province, city, address,
+                 vip_level_name, agent, stamp) in mem_list:
+
+                member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
+                if member:
+                    val = {
+                        'wxid': wxid,
+                        'unionid': unionid,
+                        'openid': openid,
+                        'nickname': nickname,
+                        'agent': agent,
+                        'bu_name': bu_name,
+                        'strEMail': email,
+                        'province': province,
+                        'city': city,
+                        'address': address,
+                        'vip_level_name': vip_level_name,
+                        'strSex': str(sex),
+                        'Birthday': birthday,
+                        'mysqlstamp': stamp,
+                    }
+                    member.write(val)
+        return True
+
+
 
     def sync_member_personal_mp_weixin(self):
         # TODO  'sync_member_personal_mp_weixin'
@@ -272,6 +310,33 @@ class proc_sync_bnc_member(models.TransientModel):
         res = ms.ExecQuery(sql.encode('utf-8'))
         return res
 
+
+
+    def get_personal_recordset_for_null(self, ms,proc_list):
+        # 获取更新记录范围，本地库的时间戳和服务端时间戳
+
+        if proc_list is None:
+            return None
+
+        p_list=[]
+        for mem in proc_list:
+            p_list.append(mem['strPhone'])
+
+        para_str=str(tuple(p_list)).replace('u','')
+        sql = """
+                select
+                mobile,bu_name, wxid, unionid, openid, nickname, sex, 
+                birthday, email, province, city, address, 
+                vip_level_name, agent,unix_timestamp(update_time)
+                from v_user 
+                where mobile in {0}
+                order by update_time desc
+                  """
+        sql = sql.format(para_str)
+        res = ms.ExecQuery(sql.encode('utf-8'))
+        return res
+
+
     def get_personal_mp_weixin(self, ms):
         # 获取更新记录范围，本地库的时间戳和服务端时间戳
         query_local = " select max(timestamp) as maxnum from bnc_mobile_bu"
@@ -354,6 +419,7 @@ class proc_sync_bnc_member(models.TransientModel):
         self.env['proc.sync.bnc.member']._sync_bnc_member()
         self.env['proc.sync.bnc.member'].identify_personal()
         self.env['proc.sync.bnc.member'].sync_member_personal_information()
+        self.env['proc.sync.bnc.member'].sync_member_personal_information_for_null()
         self.env['proc.sync.bnc.member'].sync_member_personal_mp_weixin()
         self.env['proc.sync.bnc.member'].sync_member_personal_integral_weixin()
 

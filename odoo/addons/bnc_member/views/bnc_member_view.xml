@@ -36,6 +36,12 @@
                             <field name="RegDate"/>
                             <field name="Birthday"/>
                             <field name="strSex"/>
+                            <field name="lngvipgrade"/>
+                            <field name="vip_level_name_by_vipgrade"/>
+
+
+
+
                             <field name="strStatus"/>
 
                             <field name="nickname"/>
