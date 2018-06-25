@@ -546,6 +546,7 @@ class proc_sync_jsport(models.TransientModel):
                 br01 = None
 
             if memb_id:
+#                print memb_id
                 m01 = self.env['res.partner'].search_bycardid(memb_id).id
             else:
                 m01 = None

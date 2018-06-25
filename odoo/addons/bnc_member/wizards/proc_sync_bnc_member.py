@@ -355,5 +355,6 @@ class proc_sync_bnc_member(models.TransientModel):
         self.env['proc.sync.bnc.member'].identify_personal()
         self.env['proc.sync.bnc.member'].sync_member_personal_information()
         self.env['proc.sync.bnc.member'].sync_member_personal_mp_weixin()
+        self.env['proc.sync.bnc.member'].sync_member_personal_integral_weixin()
 
         return {'type': 'ir.actions.act_window_close'}
