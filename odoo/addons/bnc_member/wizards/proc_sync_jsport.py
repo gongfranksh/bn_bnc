@@ -39,7 +39,8 @@ class proc_sync_jsport(models.TransientModel):
 
         # 获取更新记录
         sql = """ 
-               select ClassId,cast(ClassName as nvarchar(100)) as name,CONVERT(INT,timestamp) AS timestamp from product_class
+               select ClassId,cast(ClassName as nvarchar(100)) as name,CONVERT(INT,timestamp) AS timestamp
+               from product_class
                where  CONVERT(INT,timestamp) between {0} and {1}
                   """
         sql = sql.format(btw['start_stamp'], btw['end_stamp'])
@@ -63,7 +64,8 @@ class proc_sync_jsport(models.TransientModel):
 
         # 获取更新记录
         sql = """ 
-               select brandId,cast(brandName as nvarchar(100)) as name,CONVERT(INT,timestamp) AS timestamp from product_brand
+               select brandId,cast(brandName as nvarchar(100)) as name,CONVERT(INT,timestamp) AS timestamp 
+               from product_brand
                where  CONVERT(INT,timestamp) between {0} and {1}
                   """
         sql = sql.format(btw['start_stamp'], btw['end_stamp'])
@@ -457,12 +459,12 @@ class proc_sync_jsport(models.TransientModel):
             cr.execute(exec_sql)
 
             remote_exec_sql = """ 
-                    select count(*)  from (
-                    SELECT  bs.BraId,bs.saleid,bs.memb_id ,salerid,saleflag,min(DATEADD(hour,-8,bs.SaleDate)) as saledate 
-                                FROM v_bn_saledetail  bs
-                                where datediff(day,saledate,'{0}')=0 
-                                group by  bs.BraId,bs.saleid,bs.memb_id ,salerid,saleflag   
-                                 ) a
+                select count(*)  from (
+                SELECT  bs.BraId,bs.saleid,bs.memb_id ,salerid,saleflag,min(DATEADD(hour,-8,bs.SaleDate)) as saledate 
+                            FROM v_bn_saledetail  bs
+                            where datediff(day,saledate,'{0}')=0 
+                            group by  bs.BraId,bs.saleid,bs.memb_id ,salerid,saleflag   
+                             ) a
                     """
             remote_exec_sql = remote_exec_sql.format(day)
             ms = Lz_read_SQLCa(self)
@@ -486,14 +488,14 @@ class proc_sync_jsport(models.TransientModel):
 
         return vals
 
-#     def proc_check_pos_data_weekly(self):
-#         # check_pos_data_daily(7) 7表示一周
-#         # proc_date_task = self.check_pos_data_daily(1)
-#         procdate='2018-06-25'
-# #        for d in proc_date_task:
-#         self.delete_pos_data_daily(procdate)
-#         self.insert_pos_data_daily(procdate, procdate)
-#         return True
+    #     def proc_check_pos_data_weekly(self):
+    #         # check_pos_data_daily(7) 7表示一周
+    #         # proc_date_task = self.check_pos_data_daily(1)
+    #         procdate='2018-06-25'
+    # #        for d in proc_date_task:
+    #         self.delete_pos_data_daily(procdate)
+    #         self.insert_pos_data_daily(procdate, procdate)
+    #         return True
 
     def proc_check_pos_data_weekly(self):
         # check_pos_data_daily(7) 7表示一周
@@ -515,7 +517,6 @@ class proc_sync_jsport(models.TransientModel):
                 _logger.info(d['proc_date'] + '====>' + 'already done!!!')
 
         return True
-
 
     def delete_pos_data_daily(self, ymd):
         exec_sql = """ 
@@ -556,7 +557,7 @@ class proc_sync_jsport(models.TransientModel):
                 br01 = None
 
             if memb_id:
-#                print memb_id
+                #                print memb_id
                 m01 = self.env['res.partner'].search_bycardid(memb_id).id
             else:
                 m01 = None
@@ -572,13 +573,12 @@ class proc_sync_jsport(models.TransientModel):
             for (saleman, saledate_detail, proid, SaleQty, NormalPrice, curprice, amount, SaleType, PosNo,
                  profit) in pos_order_line:
 
-                #数量为0的交易为促销折扣
-                qty_tmp=SaleQty
-                price_unit_tmp=curprice
-                if SaleQty==0:
-                    qty_tmp=1
-                    price_unit_tmp=amount
-
+                # 数量为0的交易为促销折扣
+                qty_tmp = SaleQty
+                price_unit_tmp = curprice
+                if SaleQty == 0:
+                    qty_tmp = 1
+                    price_unit_tmp = amount
 
                 res.append((0, 0, {
                     'product_id': self.env['product.product'].search(
@@ -709,8 +709,8 @@ class proc_sync_jsport(models.TransientModel):
             if lens <> 0:
                 sublens = lens + 2
                 exec_sql = """ 
-                                update pos_category set parent_id={0} where length(code)={1}  and substr(code,1,{2})='{3}'
-                                 and  buid={4}
+                            update pos_category set parent_id={0} where length(code)={1}  and substr(code,1,{2})='{3}'
+                             and  buid={4}
                               """
                 exec_sql = exec_sql.format(parentid, sublens, lens, code, self._get_business()['id'])
             else:
@@ -728,8 +728,8 @@ class proc_sync_jsport(models.TransientModel):
             if lens <> 0:
                 sublens = lens + 2
                 exec_sql = """ 
-                                    update product_category set parent_id={0} where length(code)={1}  and substr(code,1,{2})='{3}'
-                                     and  buid={4}
+                        update product_category set parent_id={0} where length(code)={1}  and substr(code,1,{2})='{3}'
+                         and  buid={4}
                                   """
                 exec_sql = exec_sql.format(parentid, sublens, lens, code, self._get_business()['id'])
             else:
