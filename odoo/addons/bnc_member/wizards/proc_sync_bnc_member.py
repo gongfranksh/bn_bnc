@@ -162,7 +162,7 @@ class proc_sync_bnc_member(models.TransientModel):
                     'province': province,
                     'city': city,
                     'address': address,
-                    'vip_level_name': vip_level_name,
+                    # 'vip_level_name': vip_level_name,
                     'strSex': str(sex),
                     'Birthday': birthday,
                     'mysqlstamp': stamp,
@@ -250,8 +250,9 @@ class proc_sync_bnc_member(models.TransientModel):
         # TODO  'sync_member_personal_integral_weixin'
         db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
         mem_list = self.get_personal_integral_weixin(Bnc_Mysql_SQLCa(db[0]))
+        # mem_list = self.get_personal_integral_weixin_test(Bnc_Mysql_SQLCa(db[0]))
         for (ieid,mobile,name,teg_id,teg_name,type_name,integral,discount,validity_type,
-             up_begin,up_end,addtime,vali_begin,vali_end,serial,statu,endtime,stamp
+             up_begin,up_end,addtime,vali_begin,vali_end,serial,statu,dt_endtime,stamp
              ) in mem_list:
             member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
             if member:
@@ -275,7 +276,7 @@ class proc_sync_bnc_member(models.TransientModel):
                 'strSerial': serial,
                 'strStatus': statu,
                 'Addtime': addtime,
-                'Endtime ': endtime,
+                'Endtime': dt_endtime,
                 'timestamp': stamp,
                 'belong_bnc_member': bnc_member_id,
             }
@@ -374,9 +375,34 @@ class proc_sync_bnc_member(models.TransientModel):
                  where unix_timestamp(updatetime)>{0}
                  order by unix_timestamp(updatetime)
                    """
+
+        # sql = """
+        #         select ieid,mobile,name,teg_id,teg_name,type_name,integral,discount,
+        #                 validity_type,up_begin,up_end,
+        #                 addtime,vali_begin,vali_end,serial,statu,
+        #                 endtime,unix_timestamp(updatetime)
+        #         from v_integral
+        #         where endtime is not null
+        #            """
+        #
+
         sql = sql.format(start_stamp)
         res = ms.ExecQuery(sql.encode('utf-8'))
         return res
+
+    def get_personal_integral_weixin_test(self, ms):
+        # 获取更新记录范围，本地库的时间戳和服务端时间戳
+        sql = """
+                select ieid,mobile,name,teg_id,teg_name,type_name,integral,discount,
+                        validity_type,up_begin,up_end,
+                        addtime,vali_begin,vali_end,serial,statu,
+                        endtime,unix_timestamp(updatetime)
+                from v_integral
+                 where ieid=1
+                   """
+        res = ms.ExecQuery(sql.encode('utf-8'))
+        return res
+
 
     def identify_personal(self):
         recordset = self.env['bnc.member'].search([('phone_status', '!=', 'True')])
