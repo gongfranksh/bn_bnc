@@ -486,6 +486,15 @@ class proc_sync_jsport(models.TransientModel):
 
         return vals
 
+#     def proc_check_pos_data_weekly(self):
+#         # check_pos_data_daily(7) 7表示一周
+#         # proc_date_task = self.check_pos_data_daily(1)
+#         procdate='2018-06-25'
+# #        for d in proc_date_task:
+#         self.delete_pos_data_daily(procdate)
+#         self.insert_pos_data_daily(procdate, procdate)
+#         return True
+
     def proc_check_pos_data_weekly(self):
         # check_pos_data_daily(7) 7表示一周
         proc_date_task = self.check_pos_data_daily(TOTAL_DAY)
@@ -506,6 +515,7 @@ class proc_sync_jsport(models.TransientModel):
                 _logger.info(d['proc_date'] + '====>' + 'already done!!!')
 
         return True
+
 
     def delete_pos_data_daily(self, ymd):
         exec_sql = """ 
@@ -561,11 +571,20 @@ class proc_sync_jsport(models.TransientModel):
 
             for (saleman, saledate_detail, proid, SaleQty, NormalPrice, curprice, amount, SaleType, PosNo,
                  profit) in pos_order_line:
+
+                #数量为0的交易为促销折扣
+                qty_tmp=SaleQty
+                price_unit_tmp=curprice
+                if SaleQty==0:
+                    qty_tmp=1
+                    price_unit_tmp=amount
+
+
                 res.append((0, 0, {
                     'product_id': self.env['product.product'].search(
                         [('default_code', '=', self._get_business()['strBuscode'] + '-' + proid)]).id,
-                    'price_unit': curprice,
-                    'qty': SaleQty,
+                    'price_unit': price_unit_tmp,
+                    'qty': qty_tmp,
                     'lngsaleid': self.env['hr.employee'].search_bycode(saleman).id,
                 }))
             vals = {
