@@ -96,7 +96,7 @@ class proc_sync_bnc_member(models.TransientModel):
                 'OpenDate': opendate,
                 'RegDate': regdate,
                 'lngvipgrade': lngvipgrade,
-                'vip_level_name_by_vipgrade': lngvipgrade,
+                'vip_level_name_by_vipgrade': str(lngvipgrade),
                 'dvipDate': dvipdate,
                 'timestamp': timestamp,
 #                'strSex': strsex,
