@@ -99,7 +99,7 @@ class proc_sync_bnc_member(models.TransientModel):
                 'vip_level_name_by_vipgrade': str(lngvipgrade),
                 'dvipDate': dvipdate,
                 'timestamp': timestamp,
-#                'strSex': strsex,
+                #                'strSex': strsex,
                 'ishandset': ishandset,
                 #                        'resid':self.env['res.partner'].write(vals),
             }
@@ -129,16 +129,14 @@ class proc_sync_bnc_member(models.TransientModel):
         cr.execute(exec_sql)
         partner_list = cr.fetchall()
         for (partner_tmp, volumns, amount) in partner_list:
-            mem_id=self.env['bnc.member'].search([('resid','=',partner_tmp)])
-            vals={
-                'pos_order_count':volumns,
-                'total_amount':amount,
+            mem_id = self.env['bnc.member'].search([('resid', '=', partner_tmp)])
+            vals = {
+                'pos_order_count': volumns,
+                'total_amount': amount,
             }
 
             if mem_id:
                 mem_id.write(vals)
-
-
 
     def sync_member_personal_information(self):
         # TODO  'sync_member_personal_information'
@@ -177,9 +175,9 @@ class proc_sync_bnc_member(models.TransientModel):
 
         db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
 
-        mem_list = self.get_personal_recordset_for_null(Bnc_Mysql_SQLCa(db[0]),Need_to_update_list)
+        mem_list = self.get_personal_recordset_for_null(Bnc_Mysql_SQLCa(db[0]), Need_to_update_list)
 
-        if mem_list :
+        if mem_list:
             for (mobile, bu_name, wxid, unionid, openid, nickname, sex,
                  birthday, email, province, city, address,
                  vip_level_name, agent, stamp) in mem_list:
@@ -205,8 +203,6 @@ class proc_sync_bnc_member(models.TransientModel):
                     member.write(val)
         return True
 
-
-
     def sync_member_personal_mp_weixin(self):
         # TODO  'sync_member_personal_mp_weixin'
         db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
@@ -226,7 +222,7 @@ class proc_sync_bnc_member(models.TransientModel):
             else:
                 bnc_company_id = None
 
-            seek_mobile= self.env['bnc.mobile.bu'].search([('strPhone', '=', mobile)])
+            seek_mobile = self.env['bnc.mobile.bu'].search([('strPhone', '=', mobile)])
             val = {
                 'strPhone': mobile,
                 'RegDate': reg,
@@ -241,7 +237,7 @@ class proc_sync_bnc_member(models.TransientModel):
 
             if seek_mobile:
                 seek_mobile.write(val)
-            else :
+            else:
                 self.env['bnc.mobile.bu'].create(val)
 
         return True
@@ -251,8 +247,8 @@ class proc_sync_bnc_member(models.TransientModel):
         db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
         mem_list = self.get_personal_integral_weixin(Bnc_Mysql_SQLCa(db[0]))
         # mem_list = self.get_personal_integral_weixin_test(Bnc_Mysql_SQLCa(db[0]))
-        for (ieid,mobile,name,teg_id,teg_name,type_name,integral,discount,validity_type,
-             up_begin,up_end,addtime,vali_begin,vali_end,serial,statu,dt_endtime,stamp
+        for (ieid, mobile, name, teg_id, teg_name, type_name, integral, discount, validity_type,
+             up_begin, up_end, addtime, vali_begin, vali_end, serial, statu, dt_endtime, stamp
              ) in mem_list:
             member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
             if member:
@@ -283,11 +279,43 @@ class proc_sync_bnc_member(models.TransientModel):
             mem_c = self.env['bnc.mobile.integral'].search([('intIeId', '=', ieid)])
             if mem_c:
                 mem_c.write(val)
-            else :
+            else:
                 self.env['bnc.mobile.integral'].create(val)
         return True
 
+    def sync_member_personal_accesslog_weixin(self):
+        # TODO  'sync_member_personal_accesslog_weixin'
+        db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
+        mem_list = self.get_personal_accesslog_weixin(Bnc_Mysql_SQLCa(db[0]))
+        # i=0
+        for (wxid, mobile, unionid, openid, login_time, update_time, stamp) in mem_list:
 
+            # print i,len(mem_list)
+            # i=i+1
+
+            member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
+            if member:
+                bnc_member_id = member.id
+                member.write({'login_time': login_time})
+            else:
+                bnc_member_id = None
+            val = {
+                'strWxit': wxid,
+                'unionid': unionid,
+                'openid': openid,
+                'login_time': login_time,
+                'timestamp': stamp,
+                'belong_bnc_member': bnc_member_id,
+            }
+            mem_c = self.env['bnc.member.accesslog'].search([('strWxit', '=', wxid)])
+            if mem_c:
+                mem_c.write(val)
+            else:
+                self.env['bnc.member.accesslog'].create(val)
+
+
+
+        return True
 
     def get_personal_recordset(self, ms):
         # 获取更新记录范围，本地库的时间戳和服务端时间戳
@@ -311,19 +339,17 @@ class proc_sync_bnc_member(models.TransientModel):
         res = ms.ExecQuery(sql.encode('utf-8'))
         return res
 
-
-
-    def get_personal_recordset_for_null(self, ms,proc_list):
+    def get_personal_recordset_for_null(self, ms, proc_list):
         # 获取更新记录范围，本地库的时间戳和服务端时间戳
 
         if proc_list is None:
             return None
 
-        p_list=[]
+        p_list = []
         for mem in proc_list:
             p_list.append(mem['strPhone'])
 
-        para_str=str(tuple(p_list)).replace('u','')
+        para_str = str(tuple(p_list)).replace('u', '')
         sql = """
                 select
                 mobile,bu_name, wxid, unionid, openid, nickname, sex, 
@@ -336,7 +362,6 @@ class proc_sync_bnc_member(models.TransientModel):
         sql = sql.format(para_str)
         res = ms.ExecQuery(sql.encode('utf-8'))
         return res
-
 
     def get_personal_mp_weixin(self, ms):
         # 获取更新记录范围，本地库的时间戳和服务端时间戳
@@ -403,6 +428,39 @@ class proc_sync_bnc_member(models.TransientModel):
         res = ms.ExecQuery(sql.encode('utf-8'))
         return res
 
+    def get_personal_accesslog_weixin(self, ms):
+        # 获取更新记录范围，本地库的时间戳和服务端时间戳
+        query_local = " select max(timestamp) as maxnum from bnc_member_accesslog"
+        cr = self._cr
+        cr.execute(query_local)
+        for local_max_num in cr.fetchall():
+            start_stamp = local_max_num[0]
+            if local_max_num[0] is None:
+                start_stamp = 0
+        sql = """
+                    select
+                      wxid,mobile,unionid,openid,login_time,update_time,
+                      unix_timestamp(
+                      case when update_time is null
+                        then login_time
+                      else update_time
+                      end) as stamps
+                    from v_wx
+                    where unix_timestamp(
+                      case when update_time is null
+                        then login_time
+                      else update_time
+                      end)  >{0}
+                 order by unix_timestamp(case when update_time is null
+                        then login_time
+                      else update_time
+                      end)
+                    
+                   """
+        # start_stamp=0
+        sql = sql.format(start_stamp)
+        res = ms.ExecQuery(sql.encode('utf-8'))
+        return res
 
     def identify_personal(self):
         recordset = self.env['bnc.member'].search([('phone_status', '!=', 'True')])
@@ -448,5 +506,6 @@ class proc_sync_bnc_member(models.TransientModel):
         self.env['proc.sync.bnc.member'].sync_member_personal_information_for_null()
         self.env['proc.sync.bnc.member'].sync_member_personal_mp_weixin()
         self.env['proc.sync.bnc.member'].sync_member_personal_integral_weixin()
+        self.env['proc.sync.bnc.member'].sync_member_personal_accesslog_weixin()
 
         return {'type': 'ir.actions.act_window_close'}

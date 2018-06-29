@@ -14,4 +14,5 @@ import bn_eservice_tools
 import bnc_tags
 import bnc_mobile_bu
 import bnc_mobile_integral
+import bnc_member_accesslog
 

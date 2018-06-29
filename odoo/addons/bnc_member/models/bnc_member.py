@@ -83,6 +83,11 @@ class bnc_member(models.Model):
         #		store=True,
         string='交易金额')
 
+    login_time = fields.Datetime(
+ #       compute='_compute_login_time',
+        string='最后一次登陆')
+
+
     tags_name = fields.Char(
         compute='_compute_tags_name',
         string=u'标签名称合并',
@@ -97,6 +102,9 @@ class bnc_member(models.Model):
         ids = dict(self._cr.fetchall())
         return ids
 
+
+
+
     @api.depends('Birthday')
     def _compute_age(self):
         if self.Birthday:
@@ -105,6 +113,9 @@ class bnc_member(models.Model):
             d1 = datetime.date.today()
         d2 = datetime.date.today()
         self.age_period = d2.year - d1.year
+
+
+
 
     @api.depends('resid', 'resid.pos_order_count')
     def _compute_pos_order(self):
