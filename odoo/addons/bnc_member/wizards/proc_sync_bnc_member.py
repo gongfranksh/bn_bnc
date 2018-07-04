@@ -288,7 +288,7 @@ class proc_sync_bnc_member(models.TransientModel):
         db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
         mem_list = self.get_personal_accesslog_weixin(Bnc_Mysql_SQLCa(db[0]))
         # i=0
-        for (wxid, mobile, unionid, openid, login_time, update_time, stamp) in mem_list:
+        for (wxid, mobile, unionid, openid, login_time, update_time, bnc_login_time, stamp) in mem_list:
 
             # print i,len(mem_list)
             # i=i+1
@@ -303,7 +303,7 @@ class proc_sync_bnc_member(models.TransientModel):
                 'strWxit': wxid,
                 'unionid': unionid,
                 'openid': openid,
-                'login_time': login_time,
+                'login_time': bnc_login_time,
                 'timestamp': stamp,
                 'belong_bnc_member': bnc_member_id,
             }
@@ -440,6 +440,7 @@ class proc_sync_bnc_member(models.TransientModel):
         sql = """
                     select
                       wxid,mobile,unionid,openid,login_time,update_time,
+                       date_add(login_time, interval -8 hour) as bnc_login_time,
                       unix_timestamp(
                       case when update_time is null
                         then login_time
