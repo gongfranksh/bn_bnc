@@ -104,8 +104,9 @@ class proc_sync_bnc_member(models.TransientModel):
                 #                        'resid':self.env['res.partner'].write(vals),
             }
             if r01:
-                res['resid'] = self.env['res.partner'].write(vals)
-                self.env['bnc.member'].write(res)
+                #mem_res_partner=r01['resid']
+                r01['resid'].write(vals)
+                r01.write(res)
 
             else:
                 res['resid'] = self.env['res.partner'].create(vals).id,
