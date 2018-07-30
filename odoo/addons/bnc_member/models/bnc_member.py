@@ -49,7 +49,7 @@ class bnc_member(models.Model):
     province = fields.Char(string=u'省份')
     city = fields.Char(string=u'城市')
     address = fields.Char(string=u'地址')
-    vip_level_name = fields.Char(string=u'会员等级')
+    vip_level_name = fields.Char(string=u'vip_level_name')
     mysqlstamp = fields.Integer(string=u'资料更新日期戳')
 
     phone_1 = fields.Char(string=u'手机信息1')
