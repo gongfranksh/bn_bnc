@@ -54,6 +54,9 @@ class proc_sync_bnc_member(models.TransientModel):
         btw = self.query_period()
         ms = Bnc_read_SQLCa(self)
         # 待导入会员卡-本地时间戳和主服务器时间戳之间的记录导入，主服务器记录有更新时间戳就会变化
+        i=0
+        _logger.info("_sync_bnc_member")
+
         sql = """ 
                SELECT   lngbncid,lngbusid,strphone,strBncCode,
                DATEADD(hour,-8,opendate) as opendate, 
@@ -65,12 +68,14 @@ class proc_sync_bnc_member(models.TransientModel):
                   """
         sql = sql.format(btw['start_stamp'], btw['end_stamp'])
         #        sql = sql.format(0,58597)
-
+        i=0
         bnc_memeber_list = ms.ExecQuery(sql.encode('utf-8'))
         for (lngbncid, lngbusid, strphone, strbncardid, opendate, regdate, UpdateDate, lngvipgrade, dvipdate, timestamp,
              strsex, ishandset) in bnc_memeber_list:
             # 封装bnc_member记录
             # 封装 res_partner记录
+            _logger.info("Need Records:" +str(i)+"/"+str(len(bnc_memeber_list)) +" The Phone is "+strphone)
+            i=i+1
             print strbncardid
             vals = {
                 'strbncardid': strbncardid,
@@ -128,8 +133,11 @@ class proc_sync_bnc_member(models.TransientModel):
     	"""
         cr = self._cr
         cr.execute(exec_sql)
+        i=0
         partner_list = cr.fetchall()
         for (partner_tmp, volumns, amount) in partner_list:
+            print i ,len(partner_list),partner_tmp
+            i=i+1
             mem_id = self.env['bnc.member'].search([('resid', '=', partner_tmp)])
             vals = {
                 'pos_order_count': volumns,
@@ -210,8 +218,10 @@ class proc_sync_bnc_member(models.TransientModel):
         mem_list = self.get_personal_mp_weixin(Bnc_Mysql_SQLCa(db[0]))
         for (mobile, reg, bu_id, bu_name, shopid, codeid, stamp
              ) in mem_list:
-
+            print mobile
+            print bu_id
             member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
+
             if member:
                 bnc_member_id = member.id
             else:
@@ -248,9 +258,14 @@ class proc_sync_bnc_member(models.TransientModel):
         db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
         mem_list = self.get_personal_integral_weixin(Bnc_Mysql_SQLCa(db[0]))
         # mem_list = self.get_personal_integral_weixin_test(Bnc_Mysql_SQLCa(db[0]))
+        i=0
         for (ieid, mobile, name, teg_id, teg_name, type_name, integral, discount, validity_type,
              up_begin, up_end, addtime, vali_begin, vali_end, serial, statu, dt_endtime, stamp
              ) in mem_list:
+
+            print i, len(mem_list), mobile
+            i = i + 1
+
             member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
             if member:
                 bnc_member_id = member.id
@@ -288,11 +303,12 @@ class proc_sync_bnc_member(models.TransientModel):
         # TODO  'sync_member_personal_accesslog_weixin'
         db = self.env['bn.db.connect'].search([('store_code', '=', 'bncard')])
         mem_list = self.get_personal_accesslog_weixin(Bnc_Mysql_SQLCa(db[0]))
-        # i=0
+        i=0
         for (wxid, mobile, unionid, openid, login_time, update_time, bnc_login_time, stamp) in mem_list:
 
-            # print i,len(mem_list)
-            # i=i+1
+            print i,len(mem_list),mobile
+            i=i+1
+
 
             member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
             if member:
@@ -500,9 +516,12 @@ class proc_sync_bnc_member(models.TransientModel):
             phone = {}
         return phone
 
-    @api.multi
-    def procure_sync_bnc(self):
+    # @api.multi
+    def sync_bnc_member_from_mssql(self):
         self.env['proc.sync.bnc.member']._sync_bnc_member()
+
+
+    def procure_sync_bnc(self):
         self.env['proc.sync.bnc.member'].identify_personal()
         self.env['proc.sync.bnc.member'].sync_member_personal_information()
         self.env['proc.sync.bnc.member'].sync_member_personal_information_for_null()
