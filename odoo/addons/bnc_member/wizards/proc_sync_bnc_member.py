@@ -122,20 +122,28 @@ class proc_sync_bnc_member(models.TransientModel):
     def proc_volumn_and_amount(self):
         _logger.info("proc_volumn_and_amount")
         exec_sql = """
-    				select
-    				  po.partner_id,
-    				  count(distinct order_id) as volumn,
-    				  sum(pol.price_unit * pol.qty) as total_amt
-    				from pos_order po inner join pos_order_line pol on po.id = pol.order_id
-    				where po.partner_id is not null
-    				group by po.partner_id
-    				order by po.partner_id		
+    		select bnc.resid,sale.volumn,sale.total_amt,total_bnc from 
+                (select resid,COALESCE(total_amount,0) as total_bnc from bnc_member)
+                bnc
+                left join 
+                (select
+                                      po.partner_id,
+                                      count(distinct order_id) as volumn,
+                                      sum(pol.price_unit * pol.qty) as total_amt
+                
+                                    from pos_order po inner join pos_order_line pol on po.id = pol.order_id
+                                    where po.partner_id is not null
+                                    group by po.partner_id
+                                    order by po.partner_id
+                
+                ) sale     on bnc.resid=sale.partner_id  
+            where sale.total_amt <> bnc.total_bnc
     	"""
         cr = self._cr
         cr.execute(exec_sql)
         i=0
         partner_list = cr.fetchall()
-        for (partner_tmp, volumns, amount) in partner_list:
+        for (partner_tmp, volumns, amount,bnc_amount) in partner_list:
             print i ,len(partner_list),partner_tmp
             i=i+1
             mem_id = self.env['bnc.member'].search([('resid', '=', partner_tmp)])
