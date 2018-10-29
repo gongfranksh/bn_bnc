@@ -145,7 +145,8 @@ class proc_sync_bnc_member(models.TransientModel):
             }
 
             if mem_id:
-                mem_id.write(vals)
+                _logger.info("Need proc_volumn_and_amount:" + str(i) + "/" + str(len(partner_list))+" memberis  " +  str(mem_id[0]))
+                mem_id[0].write(vals)
 
     def sync_member_personal_information(self):
         # TODO  'sync_member_personal_information'
@@ -174,7 +175,8 @@ class proc_sync_bnc_member(models.TransientModel):
                     'Birthday': birthday,
                     'mysqlstamp': stamp,
                 }
-                member.write(val)
+                _logger.info("sync_member_personal_information:" +  "/" + " the phones is =>  " + mobile)
+                member[0].write(val)
         return True
 
     def sync_member_personal_information_for_null(self):
@@ -209,7 +211,8 @@ class proc_sync_bnc_member(models.TransientModel):
                         'Birthday': birthday,
                         'mysqlstamp': stamp,
                     }
-                    member.write(val)
+                    _logger.info("sync_member_personal_information_for_null':" + "/" + " the phones is =>  " + mobile)
+                    member[0].write(val)
         return True
 
     def sync_member_personal_mp_weixin(self):
@@ -223,13 +226,15 @@ class proc_sync_bnc_member(models.TransientModel):
             member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
 
             if member:
-                bnc_member_id = member.id
+
+                bnc_member_id = member[0].id
+                # bnc_member_id = member.id
             else:
                 bnc_member_id = None
 
             company = self.env['res.company'].search([('mp_bucode', '=', bu_id)])
             if company:
-                bnc_company_id = company.id
+                bnc_company_id = company[0].id
             else:
                 bnc_company_id = None
 
@@ -247,7 +252,8 @@ class proc_sync_bnc_member(models.TransientModel):
             }
 
             if seek_mobile:
-                seek_mobile.write(val)
+                _logger.info("sync_member_personal_mp_weixin':" + "/" + " the phones is =>  " + mobile)
+                seek_mobile[0].write(val)
             else:
                 self.env['bnc.mobile.bu'].create(val)
 
@@ -268,7 +274,7 @@ class proc_sync_bnc_member(models.TransientModel):
 
             member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
             if member:
-                bnc_member_id = member.id
+                bnc_member_id = member[0].id
             else:
                 bnc_member_id = None
             val = {
@@ -297,6 +303,7 @@ class proc_sync_bnc_member(models.TransientModel):
                 mem_c.write(val)
             else:
                 self.env['bnc.mobile.integral'].create(val)
+            _logger.info("sync_member_personal_integral_weixin':" + "/" + " the phones is =>  " + mobile)
         return True
 
     def sync_member_personal_accesslog_weixin(self):
@@ -312,7 +319,8 @@ class proc_sync_bnc_member(models.TransientModel):
 
             member = self.env['bnc.member'].search([('strPhone', '=', mobile)])
             if member:
-                bnc_member_id = member.id
+                bnc_member_id = member[0].id
+                _logger.info("sync_member_personal_accesslog_weixin':" + str(i)+ "/" +str(len(mem_list))+ " the phones is =>  " + mobile)
                 member.write({'login_time': login_time})
             else:
                 bnc_member_id = None
