@@ -102,9 +102,10 @@ class bnc_tag_process(models.TransientModel):
         #     proc_member_list.append(mem)
         #     if cnt == 5000:
         #         break
-
+        tmp_i=0
         for mem in member_list:
             try:
+                _logger.info(" process_for_phone_number==>" +mem['strPhone']+" ==>"+str(tmp_i)+"/"+str(len(member_list)) )
                 info = bnc_getProvider(mem['strPhone'])
 
                 if info:
@@ -122,6 +123,7 @@ class bnc_tag_process(models.TransientModel):
                         'num_1': 'error'}
 
                 mem.write(phone_number_info)
+                tmp_i = tmp_i+1
             except Exception:
                 continue
 
@@ -137,11 +139,11 @@ class bnc_tag_process(models.TransientModel):
         #     proc_member_list.append(mem)
         #     if cnt == 1000:
         #         break
-
+        tmp_i = 0
         for mem in member_list:
             try:
                 info = bnc_getProvider_ip386(mem['strPhone'])
-
+                _logger.info(" process_for_phone_ip386==>" +mem['strPhone']+" ==>"+str(tmp_i)+"/"+str(len(member_list)) )
                 if info:
                     phone_number_info = {
                         'num_1': info[0],
@@ -157,6 +159,7 @@ class bnc_tag_process(models.TransientModel):
                 #         'num_1': 'error'}
 
                     mem.write(phone_number_info)
+                    tmp_i = tmp_i + 1
             except Exception:
                 continue
 
@@ -243,26 +246,37 @@ class bnc_tag_process(models.TransientModel):
             rmf_entity = self.env['bnc.tags.rmf.template'].search([('id', '=', rmf[0])])
             if rmf_entity:
                 partner_list = rmf_entity.get_rfm_tags_recordset()
+                tmp_i=0
                 try:
                     for partner in partner_list:
                         partner_id = int(partner[0])
                         rfm_flag = partner[4]
                         member = self.env['bnc.member'].search([('resid', '=', partner_id)])
+                        _logger.info(" process_for_RFM==>" + member['strPhone'] + " ==>" + str(tmp_i) + "/" + str(
+                            len(partner_list)))
+
                         tag = self.env['bnc.tags'].search(
                             [('rmf_template_ids', 'in', rmf), ('rmf_flag', '=', rfm_flag)])
                         tags = []
                         tags.append((4, tag.id))
                         member.write({'tagsid': tags})
+                        tmp_i=tmp_i+1
                 except Exception:
                     continue
 
     def process_for_all(self):
         _logger.info("process_for_all")
-        self.env['proc.sync.bnc.member'].proc_volumn_and_amount()
+        # self.env['proc.sync.bnc.member'].proc_volumn_and_amount()
         self.env['bnc.tag.process'].seek_for_employee()
         self.env['bnc.tag.process'].process_for_age()
         self.env['bnc.tag.process'].process_for_period()
         self.env['bnc.tag.process'].process_for_company()
-        self.env['bnc.tag.process'].process_for_RFM()
-        self.env['bnc.tag.process'].process_for_phone_number_all()
+        # self.env['bnc.tag.process'].process_for_RFM()
+        # self.env['bnc.tag.process'].process_for_phone_number_all()
+
+    def process_for_volumn_and_amount(self):
+        self.env['proc.sync.bnc.member'].proc_volumn_and_amount()
+
+
+
 

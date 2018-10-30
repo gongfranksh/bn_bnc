@@ -55,7 +55,7 @@ class proc_sync_bnc_member(models.TransientModel):
         ms = Bnc_read_SQLCa(self)
         # 待导入会员卡-本地时间戳和主服务器时间戳之间的记录导入，主服务器记录有更新时间戳就会变化
         i=0
-        _logger.info("_sync_bnc_member")
+        _logger.info("process sync_mssql_2_bnc")
 
         sql = """ 
                SELECT   lngbncid,lngbusid,strphone,strBncCode,
@@ -538,6 +538,8 @@ class proc_sync_bnc_member(models.TransientModel):
 
 
     def procure_sync_bnc(self):
+
+        self.env['proc.sync.bnc.member'].sync_bnc_member_from_mssql()
         self.env['proc.sync.bnc.member'].identify_personal()
         self.env['proc.sync.bnc.member'].sync_member_personal_information()
         self.env['proc.sync.bnc.member'].sync_member_personal_information_for_null()
