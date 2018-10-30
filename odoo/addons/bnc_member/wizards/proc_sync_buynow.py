@@ -287,6 +287,7 @@ class proc_sync_jsport(models.TransientModel):
 
     def delete_duplicate_record_jspot(self):
         #TODO 删除涉及不能销售的产品的明细交易记录
+        #主要是乐之部分，已经在乐之jspot计算过了，就不要在统收再计算了
         exec_sql = """ 
                 delete  from pos_order_line where product_id in (
                 select id from product_product 
