@@ -4,9 +4,9 @@ import threading
 import datetime
 
 from odoo import api, models, tools, registry
-from odoo.addons.bnc_member.wizards.BNmssql import bn_SQLCa
+from ..wizards.BNmssql import bn_SQLCa
 from bnc_get_phone_number_info import *
-
+# import urlib
 _logger = logging.getLogger(__name__)
 
 
@@ -86,9 +86,10 @@ class bnc_tag_process(models.TransientModel):
     def process_for_phone_number_all(self):
         _logger.info(" process_for_phone_number_all")
         # TODO 查找未处理会员记录
+
         self.process_for_phone_number()
         self.process_for_phone_number_ip386()
-
+        self.process_for_phone_number_taobao()
 
     def process_for_phone_number(self):
         _logger.info(" process_for_phone_number")
@@ -144,6 +145,7 @@ class bnc_tag_process(models.TransientModel):
             try:
                 info = bnc_getProvider_ip386(mem['strPhone'])
                 _logger.info(" process_for_phone_ip386==>" +mem['strPhone']+" ==>"+str(tmp_i)+"/"+str(len(member_list)) )
+                tmp_i = tmp_i + 1
                 if info:
                     phone_number_info = {
                         'num_1': info[0],
@@ -154,14 +156,37 @@ class bnc_tag_process(models.TransientModel):
                         'num_6': info[0],
                         'num_7': info[0],
                     }
-                # else:
-                #     phone_number_info = {
-                #         'num_1': 'error'}
-
                     mem.write(phone_number_info)
-                    tmp_i = tmp_i + 1
             except Exception:
                 continue
+
+
+    def process_for_phone_number_taobao(self):
+        _logger.info(" process_for_phone_number_taobao")
+        # TODO 查找未处理会员记录
+        # member_list = self.env['bnc.member'].search([('num_1', '=', 'error')])
+        member_list = self.env['bnc.member'].search([('num_1', '=', False)])
+        tmp_i = 0
+        for mem in member_list:
+            try:
+                info = bnc_mobile_taobao_api(mem['strPhone'])
+                _logger.info(" process_for_phone_number_taobao==>" +mem['strPhone']+" ==>"+str(tmp_i)+"/"+str(len(member_list)) )
+                tmp_i = tmp_i + 1
+                if info:
+                    phone_number_info = {
+                        'num_1': info['province'],
+                        'num_2': info['carrier'],
+                        'num_3': info['carrier'],
+                        # 'num_4': info[2],
+                        'num_5': info['province'],
+                        'num_6': info['province'],
+                        'num_7': info['province'],
+                    }
+                    mem.write(phone_number_info)
+            except Exception as e:
+                print(e)
+                continue
+
 
 
     def process_for_period(self):

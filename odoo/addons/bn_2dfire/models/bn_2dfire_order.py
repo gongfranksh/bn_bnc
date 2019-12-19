@@ -276,7 +276,7 @@ def insert_2dfire_order(self,recordsets,certifate):
                     "openTime":  start_time,
                     "peopleCount":  ov['peopleCount'],
                     "code":  ov['code'],
-                    "simpleCode":  ov['simpleCode'],
+                    # "simpleCode":  ov['simpleCode'],
                     "endTime":  end_time,
                     "orderFrom":  ov['orderFrom'],
                     "orderType":  ov['orderType'],
@@ -361,6 +361,7 @@ def insert_2dfire_order(self,recordsets,certifate):
         
         print vals_order_insert
         self.env['bn.2dfire.order'].create(vals_order_insert)
+        self.env.cr.commit()
     return True  
 
 def insert_2dfire_order_detail(self,recordsets):

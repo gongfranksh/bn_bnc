@@ -1,7 +1,11 @@
 # coding=UTF-8
 # get provider information by phoneNumber
+import json
 from urllib2 import urlopen
 import re
+
+import chardet
+
 
 def getPageCode(url):
     try:
@@ -70,3 +74,48 @@ def parseString_ip386(src):
         v = m.group(1)
         item.append(v)
     return item
+
+
+def taobnc_mobile_taobao_api(phone):
+    url = "http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=%s" % phone
+    # print url
+    response = urlopen(url, data=None, timeout=5)
+    # res = response.read().decode(chardet.detect(response.read())['encoding']).encode('utf8')
+    res = response.read()
+    response.close()
+    coding = chardet.detect(res)['encoding']
+
+    newf = 'b.txt'
+    with open(newf, 'wb') as f:
+        f.write(res.decode(coding).encode('utf8'))
+
+    with open(newf, 'r') as f:
+        pp = f.read()
+
+    searchObj = re.search(r"""__GetZoneResult_ = {
+    mts:'(.*)',
+    province:'(.*)',
+    catName:'(.*)',
+    telString:'(.*)',
+	areaVid:'(.*)',
+	ispVid:'(.*)',
+	carrier:'(.*)'
+}""", pp, re.M | re.I)
+    #
+    if searchObj:
+        # print "mts: ", searchObj.group(1)
+        # print "searchObj.group(2) : ", searchObj.group(2)
+        # print "searchObj.group(2) : ", searchObj.group(3)
+        # print "searchObj.group(2) : ", searchObj.group(4)
+        # print "searchObj.group(2) : ", searchObj.group(5)
+        # print "searchObj.group(2) : ", searchObj.group(6)
+        # print "searchObj.group(2) : ", searchObj.group(7)
+
+        rst = {'province': searchObj.group(2),
+               'telString': searchObj.group(4),
+               'carrier': searchObj.group(7)
+               }
+        print(rst)
+    else:
+        rst = None
+    return rst

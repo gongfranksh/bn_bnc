@@ -13,8 +13,9 @@ from odoo.addons.bnc_member.models.bnc_2dfire import *
 
 _logger = logging.getLogger(__name__)
 
-begin_day = 7
-end_day = 0
+# begin_day = 7
+begin_day = 2
+end_day = 1
 
 class proc_sync_2dfire(models.TransientModel):
     _name = 'proc.sync.2dfire'
@@ -31,12 +32,24 @@ class proc_sync_2dfire(models.TransientModel):
         
         
         print 'sync_2dfire_sales'
+
+        # bg = '2019-01-17 00:00:00'
+        # beg=datetime.datetime.strptime(bg, "%Y-%m-%d %H:%M:%S")
+        #
+        # ed = '2019-01-17 23:59:59'
+        # end = datetime.datetime.strptime(bg, "%Y-%m-%d %H:%M:%S")
+
+
         period ={
             'begin':datetime.datetime.now()- datetime.timedelta(days=begin_day),
             'end':datetime.datetime.now()-datetime.timedelta(days=end_day),
             }
         
-        
+        # period ={
+        #     'begin':beg,
+        #     'end':end,
+        #     }
+
         sync_sales_from_api(self,period)
         sync_order_detail_from_api(self,period)            
         return True           
@@ -98,5 +111,29 @@ class proc_sync_2dfire(models.TransientModel):
         self.env['proc.sync.2dfire'].interface_2dfire_to_bnc_product()        
         self.env['proc.sync.2dfire'].interface_2dfire_to_bnc_sales()          
         
-        return True      
-       
+        return True
+
+
+    def proc_sync_2dfire_batch(self,start,end):
+
+
+
+        period = {
+            'begin':datetime.datetime.strptime(start,'%Y-%m-%d') ,
+            'end': datetime.datetime.strptime(end,'%Y-%m-%d')
+        }
+        sync_sales_from_api(self, period)
+        sync_order_detail_from_api(self, period)
+        self.env['proc.sync.2dfire'].interface_2dfire_to_bnc_category()
+        self.env['proc.sync.2dfire'].interface_2dfire_to_bnc_product()
+        return True
+
+    def proc_sync_2dfire_batch_sales(self,start,end):
+        period = {
+            'begin': datetime.datetime.strptime(start, '%Y-%m-%d'),
+            'end': datetime.datetime.strptime(end, '%Y-%m-%d')
+        }
+        # self.env['proc.sync.2dfire'].interface_2dfire_to_bnc_product()
+        bnc_insert_sales_batch(self,period)
+
+        return True

@@ -102,10 +102,12 @@ def bnc_insert_product(self):
                 r01=self.env['product.template'].search_bycode(pids['code'])
                 if r01:            
                     r01.write(res)
+                    self.env.cr.commit()
     #                print 'update'
-    #                print res            
+    #                print res
                 else:
                     self.env['product.template'].create(res)
+                    self.env.cr.commit()
     #                print 'create'
     #                print res
     #        self.set_jsport_category_parent()  
@@ -132,13 +134,49 @@ def bnc_insert_sales(self):
                        _logger.info("bnc=>2dfire bnc_insert_sales"+d['proc_date'] +'====>'+'already done!!!')                                    
                        print d['proc_date'] +'====>'+'already done!!!'
     
-        return 
-    
-    
+        return
+
+
+def bnc_insert_sales_batch(self,period):
+    print 'bnc_insert_sales'
+    # proc_days 往前处理几天
+
+    start=period['begin']
+    end=period['end']
+
+
+    # proc_days = TOTAL_DAY
+    buids = self.env['bnc.business'].search([('strBuscode', 'in', ['btw', 'cof'])])
+    for buid in buids:
+
+        proc_date_task = check_pos_data_daily_batch(self, period, buid)
+        #            if db['store_code'] =='02002':
+        for d in proc_date_task:
+            if (d['local_records_count'] <> d['remote_records_count']) or (d['local_records_count'] == 0):
+                _logger.info("bnc=>2dfire bnc_insert_sales" + d['proc_date'] + '====>' + 'local have====>' + str(
+                    d['local_records_count']) + '     remote have====>' + str(
+                    d['remote_records_count']) + '==>need to sync')
+
+                print d['proc_date'] + '====>' + 'local have====>' + str(
+                    d['local_records_count']) + '     remote have====>' + str(
+                    d['remote_records_count']) + '==>need to sync'
+                delete_pos_data_daily(self, d['proc_date'], buid)
+                insert_pos_data_daily(self, d['proc_date'], buid)
+            else:
+                _logger.info("bnc=>2dfire bnc_insert_sales" + d['proc_date'] + '====>' + 'already done!!!')
+                print d['proc_date'] + '====>' + 'already done!!!'
+
+    return
+
+
+
+
+
+
 def delete_pos_data_daily(self,ymd,business):
             exec_sql=""" 
                         delete from pos_order 
-                        where to_char(date_order,'yyyy-mm-dd')='{0}' and buid ={1}
+                         where to_char(date_order+ interval '8 H','yyyy-mm-dd')='{0}' and buid ={1} 
                     """
             exec_sql=exec_sql.format(ymd,business.id)  
             cr = self._cr 
@@ -162,7 +200,8 @@ def insert_pos_data_daily(self,procdate,business):
             
         
             br01=self.env['res.company'].search_bycode(ov['entityId']).id
-                
+            buid=self.env['res.company'].search_bycode(ov['entityId'])['buid']
+
             if  ov['memo'] :
                 phone=ov['memo'][1:12]
                 rs01=self.env['bnc.member'].get_mem_by_phone(phone)
@@ -176,24 +215,59 @@ def insert_pos_data_daily(self,procdate,business):
             
             print  ov['entityId']
             print ov['innerCode'][0:8]+ ov['endTime'][0:4]
-            saledate= bnc_char_to_date(ov['endTime'])
-              
+            saledate= bnc_char_to_date(ov['openTime'])
+            # saledate= bnc_char_to_date()
+            # saledate = datetime.datetime.strptime(ov['openTime'], '%Y-%m-%d %H:%M:%S')
+            # saledate = datetime.datetime.strptime(ov['openTime'], '%Y-%m-%d %H:%M:%S')
+
             pos_order_line = self.env['bn.2dfire.order.orderlist'].search([('orderId','=',ov['orderId'])])   
             for pl in pos_order_line:
                 
                 inter_pcode= pl['menuId']
-                res.append((0,0,{
-                    'product_id':self.env['product.product'].search([('default_code', '=',inter_pcode)]).id,
-                    'price_unit':pl['price'],
-                    'qty':pl['num'], 
+                print(inter_pcode)
+
+                p001= self.env['product.product'].search([('default_code', '=', inter_pcode)])
+
+                #找不到商品当场创建
+                if not p001:
+                    pd_res={
+                    'code' : pl['menuId'],
+                    'name' : pl['name'],
+    #                'spec':spec,
+    #                'brand_id':b01,
+                    'list_price':pl['fee'],
+                    'price':pl['fee'],
+    #                'bn_barcode':tmp_code,
+                    'sale_ok':True,
+                    'default_code': pl['menuId'],
+                    'categ_id':self.env['product.category'].search_bycode(pl['entityId']).id,
+    #                'b_category':self.env['product.category'].search_bycode(store_code+'-'+classid[0:4]).id,
+    #                'm_category':self.env['product.category'].search_bycode(store_code+'-'+classid[0:6]).id,
+    #                'b_sup_id':s01.id,
+    #                'timestamp': timestamp,
+                    'buid':buid.id,
+                    'store_id':br01,
+                    }
+
+                    newp=self.env['product.template'].create(pd_res)
+
+                    res.append((0, 0, {
+                        'product_id': newp.id,
+                        'price_unit': pl['price'],
+                        'qty': pl['num'],
                     }))
-                
+                else:
+                    res.append((0,0,{
+                        'product_id':p001.id,
+                        'price_unit':pl['price'],
+                        'qty':pl['num'],
+                        }))
 
             vals={
                 'date_order': saledate,
                 'company_id': br01,
                 'user_id':None,
-                'note':ov['orderId'],
+                'note':ov['innerCode']+'=>'+ov['orderId'],
                 'partner_id':m01,
                 'pos_reference':ov['orderId'],
                 'lines':res,
@@ -209,6 +283,7 @@ def insert_pos_data_daily(self,procdate,business):
                 vals.update({'user_id':self.env['res.users'].search([('login', '=','caf-users')]).id })
 
             master=self.env['pos.order'].create(vals)
+            self.env.cr.commit()
         
         return True
 
@@ -224,7 +299,7 @@ def check_pos_data_daily(self,para_interval,business):
             print day              
             exec_sql=""" 
                         select count(*)  from pos_order 
-                        where to_char(date_order,'yyyy-mm-dd')='{0}' and buid ={1} 
+                        where to_char(date_order+ interval '8 H','yyyy-mm-dd')='{0}' and buid ={1} 
                     """
             exec_sql=exec_sql.format(day.strftime('%Y-%m-%d'),business.id)  
             cr = self._cr 
@@ -238,4 +313,40 @@ def check_pos_data_daily(self,para_interval,business):
             vals.append({'proc_date':day.strftime('%Y-%m-%d'),'local_records_count':localcnt,'remote_records_count':remote_cnt})       
 
         return vals
-    
+
+
+def check_pos_data_daily_batch(self, period, business):
+    vals = []
+    end_date = period['end']
+    start_date= period['begin']
+    # s1=time.strftime(start_date,"%Y-%m-%d")
+    # e1=time.strftime(end_date,"%Y-%m-%d")
+
+    para_interval=(end_date-start_date).days
+
+
+    for i in range(1, para_interval + 1):
+        servercnt = 0
+        localcnt = 0
+        day = end_date - datetime.timedelta(days=i)
+        currdate = day.strftime('%Y-%m-%d').replace('-', '')
+        print day
+        exec_sql = """ 
+                        select count(*)  from pos_order 
+                        where to_char(date_order+ interval '8 H','yyyy-mm-dd')='{0}' and buid ={1} 
+                    """
+        exec_sql = exec_sql.format(day.strftime('%Y-%m-%d'), business.id)
+        cr = self._cr
+        cr.execute(exec_sql)
+
+        for local_count in cr.fetchall():
+            localcnt = local_count[0]
+        stores = bnc_get_storescode_byBussinessUnit(self, business)
+        orderlist = self.env['bn.2dfire.order.ordervo'].search(
+            [('innerCode', 'like', currdate + '____'), ('entityId', 'in', stores)])
+        remote_cnt = len(orderlist)
+        vals.append({'proc_date': day.strftime('%Y-%m-%d'), 'local_records_count': localcnt,
+                     'remote_records_count': remote_cnt})
+
+    return vals
+
