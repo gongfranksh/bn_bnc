@@ -263,7 +263,7 @@ def insert_2dfire_order(self,recordsets,certifate):
 #          print 'test'
         
         if  r01:
-            break
+            continue
  
         openTime = ov['openTime']
         endTime = ov['endTime']

@@ -15,7 +15,7 @@ _logger = logging.getLogger(__name__)
 
 # begin_day = 7
 begin_day = 2
-end_day = 1
+end_day = 0
 
 class proc_sync_2dfire(models.TransientModel):
     _name = 'proc.sync.2dfire'
@@ -29,32 +29,32 @@ class proc_sync_2dfire(models.TransientModel):
     
     
     def sync_2dfire_sales(self):
-        
-        
         print 'sync_2dfire_sales'
-
-        # bg = '2019-01-17 00:00:00'
-        # beg=datetime.datetime.strptime(bg, "%Y-%m-%d %H:%M:%S")
-        #
-        # ed = '2019-01-17 23:59:59'
-        # end = datetime.datetime.strptime(bg, "%Y-%m-%d %H:%M:%S")
-
-
         period ={
             'begin':datetime.datetime.now()- datetime.timedelta(days=begin_day),
             'end':datetime.datetime.now()-datetime.timedelta(days=end_day),
             }
-        
-        # period ={
-        #     'begin':beg,
-        #     'end':end,
-        #     }
-
         sync_sales_from_api(self,period)
         sync_order_detail_from_api(self,period)            
         return True           
     
-    
+
+    def sync_2dfire_sales_batch(self,begin,end):
+        print 'sync_2dfire_sales'
+        if type(begin) is datetime.datetime:
+            period ={
+                'begin':begin,
+                'end':end,
+                }
+
+
+            sync_sales_from_api(self,period)
+            sync_order_detail_from_api(self,period)
+        return True
+
+
+
+
     def sync_2dfire_category(self):
         print 'sync_2dfire_category'
 #        get_2dfire_catagory_from_api(self)

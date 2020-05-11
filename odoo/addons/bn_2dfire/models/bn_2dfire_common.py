@@ -52,6 +52,7 @@ class bn_2dfire_branchs(models.Model):
 
 
 
+
 class bn_2dfire_url(models.Model):
     _name = 'bn.2dfire.url'
     code=fields.Char(string=u'编号' )
