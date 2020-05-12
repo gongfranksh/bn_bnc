@@ -223,7 +223,9 @@ def get_2dfire_order_detail_from_api(self,procdate):
                             remote_records.append(rc)
 #                        print remote_records    
             print len(remote_records)  
-            if len(remote_records)<>0  and local_reord_number==0:
+            # if len(remote_records)<>0  and local_reord_number==0:
+            if len(remote_records)<>0  and remote_records <> local_reord_number:
+                    delete_local_record_2dfire_order_detail(self,currdate,store)
                     print 'local_reord_number'
                     print local_reord_number
                     
@@ -368,7 +370,7 @@ def insert_2dfire_order_detail(self,recordsets):
     if (len(recordsets) == 0):
             return
     vals=[]
-    for rec in   recordsets: 
+    for rec in   recordsets:
         vals={
             'entityId':rec['entityId'],
             'kind':rec['kind'],
@@ -395,7 +397,6 @@ def insert_2dfire_order_detail(self,recordsets):
 
 
 def get_local_record_number_2dfire_order_detail(self,orders):
-    
     if len(orders) ==2 :
             return 0
     else:
@@ -415,4 +416,16 @@ def get_local_record_number_2dfire_order_detail(self,orders):
             return recno
         else:
             return 0
+
+
+def delete_local_record_2dfire_order_detail(self,procdate,store):
+        sql=""" 
+                        delete FROM bn_2dfire_order_orderlist
+                        where "orderId" in (
+                        select "orderId"  from  bn_2dfire_order_ordervo where "innerCode" like '{0}%'
+                        and "orderId"  in ( select ordersn from bn_2dfire_order where store_code='{1}'))
+                              """
+        sql=sql.format(procdate,str(store.code))
+        cr = self._cr
+        cr.execute(sql)
 

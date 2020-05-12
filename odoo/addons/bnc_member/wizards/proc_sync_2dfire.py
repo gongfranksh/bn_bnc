@@ -39,19 +39,6 @@ class proc_sync_2dfire(models.TransientModel):
         return True           
     
 
-    def sync_2dfire_sales_batch(self,begin,end):
-        print 'sync_2dfire_sales'
-        if type(begin) is datetime.datetime:
-            period ={
-                'begin':begin,
-                'end':end,
-                }
-
-
-            sync_sales_from_api(self,period)
-            sync_order_detail_from_api(self,period)
-        return True
-
 
 
 
@@ -115,8 +102,6 @@ class proc_sync_2dfire(models.TransientModel):
 
 
     def proc_sync_2dfire_batch(self,start,end):
-
-
 
         period = {
             'begin':datetime.datetime.strptime(start,'%Y-%m-%d') ,
