@@ -19,6 +19,7 @@ class bnc_tags(models.Model):
     isRunScript = fields.Boolean(string=u'是否由脚本运行')
     internal_method = fields.Selection(
         [('ByAmount', 'amt'), ('ByQty', 'qty'), ('ByPhone', 'phone'), ('ByAge', 'age'), ('ByPeriod', 'period'),
+         ('ByMG', 'MG'),
          ('ByCompany', 'Company'),('ByRMF', 'RMF')],
         string=u'内部类型')
     run_method = fields.Text(string=u'运行程序')

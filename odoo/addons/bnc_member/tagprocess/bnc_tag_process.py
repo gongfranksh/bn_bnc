@@ -83,6 +83,36 @@ class bnc_tag_process(models.TransientModel):
                 except Exception:
                     continue
 
+
+    def process_for_mg(self):
+        _logger.info(" process_for_mg")
+        tag_list = self.env['bnc.tags'].search([('internal_method', '=', 'ByMG'), ('isActive', '=', True)])
+        cr = self._cr
+        for tag in tag_list:
+            # TODO 删除原来的标签
+            exec_sql = """
+               delete from bnc_tags_member_rel where tagid ={0}
+            """
+            exec_sql = exec_sql.format(tag['id'])
+            cr.execute(exec_sql)
+
+            if tag['isRunScript']:
+                sql = tag['run_sql']
+                try:
+                    cr.execute(sql)
+                    result = cr.fetchall()
+                    for rec in result:
+                        mem = self.env['bnc.member'].search([('id', '=', rec[0])])
+                        if mem:
+                            tags = []
+                            tags.append((4, tag.id))
+                            mem.write({'tagsid': tags})
+
+                except Exception:
+                    continue
+
+
+
     def process_for_phone_number_all(self):
         _logger.info(" process_for_phone_number_all")
         # TODO 查找未处理会员记录
@@ -164,28 +194,28 @@ class bnc_tag_process(models.TransientModel):
     def process_for_phone_number_taobao(self):
         _logger.info(" process_for_phone_number_taobao")
         # TODO 查找未处理会员记录
-        # member_list = self.env['bnc.member'].search([('num_1', '=', 'error')])
-        member_list = self.env['bnc.member'].search([('num_1', '=', False)])
-        tmp_i = 0
-        for mem in member_list:
-            try:
-                info = bnc_mobile_taobao_api(mem['strPhone'])
-                _logger.info(" process_for_phone_number_taobao==>" +mem['strPhone']+" ==>"+str(tmp_i)+"/"+str(len(member_list)) )
-                tmp_i = tmp_i + 1
-                if info:
-                    phone_number_info = {
-                        'num_1': info['province'],
-                        'num_2': info['carrier'],
-                        'num_3': info['carrier'],
-                        # 'num_4': info[2],
-                        'num_5': info['province'],
-                        'num_6': info['province'],
-                        'num_7': info['province'],
-                    }
-                    mem.write(phone_number_info)
-            except Exception as e:
-                print(e)
-                continue
+        # # member_list = self.env['bnc.member'].search([('num_1', '=', 'error')])
+        # member_list = self.env['bnc.member'].search([('num_1', '=', False)])
+        # tmp_i = 0
+        # for mem in member_list:
+        #     try:
+        #         info = bnc_mobile_taobao_api(mem['strPhone'])
+        #         _logger.info(" process_for_phone_number_taobao==>" +mem['strPhone']+" ==>"+str(tmp_i)+"/"+str(len(member_list)) )
+        #         tmp_i = tmp_i + 1
+        #         if info:
+        #             phone_number_info = {
+        #                 'num_1': info['province'],
+        #                 'num_2': info['carrier'],
+        #                 'num_3': info['carrier'],
+        #                 # 'num_4': info[2],
+        #                 'num_5': info['province'],
+        #                 'num_6': info['province'],
+        #                 'num_7': info['province'],
+        #             }
+        #             mem.write(phone_number_info)
+        #     except Exception as e:
+        #         print(e)
+        #         continue
 
 
 

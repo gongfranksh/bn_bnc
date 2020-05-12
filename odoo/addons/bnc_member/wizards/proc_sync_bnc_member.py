@@ -755,6 +755,7 @@ class proc_sync_bnc_member(models.TransientModel):
         self.sync_mg_2_bnc()
         self.sync_mg_customer_2_bnc()
         self.sync_mg_weixinfans_2_bnc()
+        self.env['bnc.tag.process'].process_for_mg()
 
 
 
