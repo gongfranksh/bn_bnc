@@ -537,6 +537,227 @@ class proc_sync_bnc_member(models.TransientModel):
         self.env['proc.sync.bnc.member']._sync_bnc_member()
 
 
+    def get_mg_guide_info(self, ms):
+        # 获取更新记录范围，本地库的时间戳和服务端时间戳
+        query_local = " select max(lng_mg_id) as maxnum  from bnc_mg_guideinfo"
+        cr = self._cr
+        cr.execute(query_local)
+        for local_max_num in cr.fetchall():
+            start_stamp = local_max_num[0]
+            if local_max_num[0] is None:
+                start_stamp = 0
+        sql = """
+                select id,realname,nickname,gender,phone,password,province,city,area,addtime 
+                from mg_guide_info
+                where id >{0}
+                order by id
+                   """
+        sql = sql.format(start_stamp)
+        res = ms.ExecQuery(sql.encode('utf-8'))
+        return res
+
+
+    def get_mg_guide_customer(self, ms):
+        # 获取更新记录范围，本地库的时间戳和服务端时间戳
+        query_local = " select max(lng_mg_id) as maxnum  from bnc_mg_guidecustomer"
+        cr = self._cr
+        cr.execute(query_local)
+        for local_max_num in cr.fetchall():
+            start_stamp = local_max_num[0]
+            if local_max_num[0] is None:
+                start_stamp = 0
+        sql = """
+                select id,guide_id,manager_id,customer_openid,addtime,realname,gender,phone,province,city,area,tags  
+                from mg_guide_customer
+                where id >{0}
+                order by id
+                   """
+        sql = sql.format(start_stamp)
+        res = ms.ExecQuery(sql.encode('utf-8'))
+        return res
+
+
+
+
+    def get_mg_weixinfans(self, ms):
+        # 获取更新记录范围，本地库的时间戳和服务端时间戳
+        query_local = " select max(lng_mg_id) as maxnum  from bnc_mg_weixinfans"
+        cr = self._cr
+        cr.execute(query_local)
+        for local_max_num in cr.fetchall():
+            start_stamp = local_max_num[0]
+            if local_max_num[0] is None:
+                start_stamp = 0
+        sql = """
+                select  id,wxid,openid,nickname,sex,province,city,country,headimgurl,unionid,
+                          subscribe_time_dt,subscribe,groupid,tagid_list,addtime,lasttime,
+                          last_baseauth_time,is_rec_msg,from_xcx,tags  
+                from mg_weixin_fans
+                where id >{0}
+                order by id
+                   """
+        sql = sql.format(start_stamp)
+        res = ms.ExecQuery(sql.encode('utf-8'))
+        return res
+
+
+    def sync_mg_2_bnc(self):
+        # TODO  'sync_mg_2_bnc'
+        db = self.env['bn.db.connect'].search([('store_code', '=', 'mgjspot')])
+        mem_list = self.get_mg_guide_info(Bnc_Mysql_SQLCa(db[0]))
+        # mem_list = self.get_personal_integral_weixin_test(Bnc_Mysql_SQLCa(db[0]))
+        i=0
+        for (id ,realname, nickname, gender ,phone ,password, province, city, area ,addtime
+             ) in mem_list:
+
+            i = i + 1
+
+            member = self.env['bnc.member'].search([('strPhone', '=', phone)])
+
+            if member:
+                bnc_member_id = member[0].id
+            else:
+                bnc_member_id = None
+
+            val = {
+                'lng_mg_id': id,
+                'realname': realname,
+                'nickname': nickname,
+                'gender': gender,
+                'phone': phone,
+                'password': password,
+                'province': province,
+                'city': city,
+                'area': area,
+                'addtime': addtime
+            }
+            mem_c = self.env['bnc.mg.guideinfo'].search([('lng_mg_id', '=', id)])
+            if mem_c:
+                mem_c.write(val)
+            else:
+                self.env['bnc.mg.guideinfo'].create(val)
+            _logger.info("sync_guideinfo':" + "/" + " the phones is =>  " + phone)
+        return True
+
+
+
+
+    def sync_mg_customer_2_bnc(self):
+        # TODO  'sync_mg_customer_2_bnc'
+        db = self.env['bn.db.connect'].search([('store_code', '=', 'mgjspot')])
+        mem_list = self.get_mg_guide_customer(Bnc_Mysql_SQLCa(db[0]))
+        # mem_list = self.get_personal_integral_weixin_test(Bnc_Mysql_SQLCa(db[0]))
+        i=0
+        for ( id,guide_id,manager_id,customer_openid,addtime,realname,gender,phone,province,city,area,tags
+             ) in mem_list:
+
+            i = i + 1
+
+            member = self.env['bnc.member'].search([('strPhone', '=', phone)])
+
+            if member:
+                bnc_member_id = member[0].id
+            else:
+                bnc_member_id = None
+
+            val = {
+                'lng_mg_id': id,
+                'guide_id': guide_id,
+                'manager_id': manager_id,
+                'customer_openid': customer_openid,
+                'addtime': addtime,
+                'realname': realname,
+                'gender': gender,
+                'phone': phone,
+                'province': province,
+                'city': city,
+                'area': area,
+                'tags': tags
+            }
+            mem_c = self.env['bnc.mg.guidecustomer'].search([('lng_mg_id', '=', id)])
+            if mem_c:
+                mem_c.write(val)
+            else:
+                self.env['bnc.mg.guidecustomer'].create(val)
+                self.env.cr.commit()
+
+            # print("sync_guidecustomer':" + str(id) + "====>" + str(i) + "/" + str(len(mem_list)))
+
+            if i % 100==0:
+                _logger.info("sync_guidecustomer':" +str(id)+ "====>"+str(i)+"/"+ str(len(mem_list)))
+        return True
+
+
+
+
+    def sync_mg_weixinfans_2_bnc(self):
+        # TODO  'sync_mg_weixinfans_2_bnc'
+        db = self.env['bn.db.connect'].search([('store_code', '=', 'mgjspot')])
+        mem_list = self.get_mg_weixinfans(Bnc_Mysql_SQLCa(db[0]))
+        # mem_list = self.get_personal_integral_weixin_test(Bnc_Mysql_SQLCa(db[0]))
+        i=0
+        for ( id,wxid,openid,nickname,sex,province,city,country,headimgurl,unionid,subscribe_time_dt,subscribe,
+              groupid,tagid_list,addtime,lasttime,last_baseauth_time,is_rec_msg,from_xcx,tags
+             ) in mem_list:
+
+            i = i + 1
+
+            # member = self.env['bnc.member'].search([('strPhone', '=', phone)])
+            #
+            # if member:
+            #     bnc_member_id = member[0].id
+            # else:
+            #     bnc_member_id = None
+
+            val = {
+                'lng_mg_id': id,
+                'wxid': wxid,
+                'openid': openid,
+                'nickname': nickname,
+                'sex': sex,
+                'province': province,
+                'city': city,
+                'country': country,
+                'headimgurl': headimgurl,
+                'unionid': unionid,
+                'subscribe_time_dt': subscribe_time_dt,
+                'subscribe': subscribe,
+                'groupid': groupid,
+                'tagid_list': tagid_list,
+                'addtime': addtime,
+                'lasttime': lasttime,
+                'last_baseauth_time': last_baseauth_time,
+                'is_rec_msg': is_rec_msg,
+                'tags': tags
+            }
+            mem_c = self.env['bnc.mg.weixinfans'].search([('lng_mg_id', '=', id)])
+            if mem_c:
+                mem_c.write(val)
+            else:
+                self.env['bnc.mg.weixinfans'].create(val)
+                self.env.cr.commit()
+
+            # print("sync_guidecustomer':" + str(id) + "====>" + str(i) + "/" + str(len(mem_list)))
+
+            if i % 100==0:
+                _logger.info("sync_bnc.mg.weixinfans':" +str(id)+ "====>"+str(i)+"/"+ str(len(mem_list)))
+        return True
+
+
+
+
+
+
+
+
+    def proc_sync_bnc_mg(self):
+        print("proc_sync_bnc_mg")
+        self.sync_mg_2_bnc()
+        self.sync_mg_customer_2_bnc()
+        self.sync_mg_weixinfans_2_bnc()
+
+
+
     def procure_sync_bnc(self):
 
         self.env['proc.sync.bnc.member'].sync_bnc_member_from_mssql()

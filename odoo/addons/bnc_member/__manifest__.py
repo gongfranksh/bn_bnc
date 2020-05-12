@@ -47,7 +47,7 @@
         'data/business_data.xml',
         'data/company_data.xml',
         'data/user_data.xml',
-       'data/bn_db_data.xml',
+       # 'data/bn_db_data.xml',
        'security/bnc_security.xml',
        'security/ir.model.access.csv',
 

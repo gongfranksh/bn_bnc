@@ -22,6 +22,7 @@
                         <button name="sync_member_personal_accesslog_weixin" string="访问日志时间" type="object" class="btn-primary"/>
                         <button name="identify_personal" string="识别手机" type="object" class="btn-primary"/>
                         <button name="proc_volumn_and_amount" string="计算消费金额和笔数" type="object" class="btn-primary"/>
+                        <button name="proc_sync_bnc_mg" string="同步卖购资料" type="object" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="取消 Cancel" />
                     </footer>
                 </form>
