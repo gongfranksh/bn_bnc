@@ -50,4 +50,6 @@ and "orderId"  in ( select ordersn from bn_2dfire_order where store_code='131360
                         select "orderId"  from  bn_2dfire_order_ordervo where "innerCode" like '20200511%'
                         and "orderId"  in ( select ordersn from bn_2dfire_order where store_code='131360'))
 
-
+select write_date +  interval '8 H',*  from bn_2dfire_order_ordervo where "orderId" in (
+select "orderId"  from  bn_2dfire_order_ordervo where "innerCode" like '20200513%'
+and "orderId"  in ( select ordersn from bn_2dfire_order where store_code='131360'))
